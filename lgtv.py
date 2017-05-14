@@ -199,7 +199,7 @@ class LGTVClient(WebSocketClient):
         if self.__handshake_done is False:
             print "Error: Handshake failed"
         if self.__waiting_command is None or len(self.__waiting_command.keys()) == 0:
-            sys.exit(0)
+            self.close()
         command = self.__waiting_command.keys()[0]
         args = self.__waiting_command[command]
         self.__class__.__dict__[command](self, **args)
@@ -244,10 +244,10 @@ class LGTVClient(WebSocketClient):
         # {"type":"response","id":"0","payload":{"returnValue":true}}
         if response['type'] == "error":
             print json.dumps(response)
-            sys.exit(1)
+            self.close()
         if "returnValue" in response["payload"] and response["payload"]["returnValue"] is True:
             print json.dumps(response)
-            sys.exit(0)
+            self.close()
         else:
             print json.dumps(response)
 
@@ -436,8 +436,7 @@ def parseargs(command, argv):
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         usage("Too few arguments")
-        sys.exit(1)
-    if sys.argv[1] == "scan":
+    elif sys.argv[1] == "scan":
         results = LGTVScan()
         if len(results) > 0:
             print json.dumps({
@@ -450,23 +449,24 @@ if __name__ == '__main__':
                 "result": "failed",
                 "count": len(results)
             })
-        sys.exit(1)
-    if sys.argv[1] == "on":
+    elif sys.argv[1] == "on":
         ws = LGTVClient()
         ws.on()
-        sys.exit(1)
-    if sys.argv[1] == "auth":
+    elif sys.argv[1] == "auth":
         if len(sys.argv) < 3:
             usage("Hostname or IP is required for auth")
         ws = LGTVClient(sys.argv[2])
         ws.connect()
         ws.run_forever()
-        sys.exit(1)
-    try:
-        ws = LGTVClient()
-        args = parseargs(sys.argv[1], sys.argv[2:])
-        ws.connect()
-        ws.exec_command(sys.argv[1], args)
-        ws.run_forever()
-    except KeyboardInterrupt:
-        ws.close()
+    else:
+        try:
+            ws = LGTVClient()
+            try:
+                args = parseargs(sys.argv[1], sys.argv[2:])
+            except Exception as e:
+                usage(e.message)
+            ws.connect()
+            ws.exec_command(sys.argv[1], args)
+            ws.run_forever()
+        except KeyboardInterrupt:
+            ws.close()
