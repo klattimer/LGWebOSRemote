@@ -66,8 +66,18 @@ a patch to handle it but waiting on the pull request https://github.com/Lawouach
 
     $ python lgtv.py on
     $ python lgtv.py off
+
+    # If you have the youtube plugin
     $ python lgtv.py openYoutubeURL https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+    # Otherwise, this works reasonably well
+    $ python lgtv.py openBrowserAt https://www.youtube.com/tv#/watch?v=dQw4w9WgXcQ
 
 ## Caveats
 
 You need to auth with the TV before being able to use the on command as it requires the mac address.
+
+## Bugs
+
+I couldn't test youtube because it seems the app isn't installed and not available to download right now
+maybe they're updating it?
