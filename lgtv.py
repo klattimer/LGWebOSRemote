@@ -390,7 +390,7 @@ def usage(error=None):
     print "Available Commands:"
 
     print "  scan"
-    print "  auth                  Authenticate and exit, creates initial config ~/.lgtv.json"
+    print "  auth                  Hostname/IP    Authenticate and exit, creates initial config ~/.lgtv.json"
 
     for c in getCommands(LGTVClient):
         print "  " + c,
@@ -449,6 +449,11 @@ if __name__ == '__main__':
         ws = LGTVClient()
         ws.on()
         sys.exit(1)
+    if sys.argv[1] == "auth":
+        if len(sys.argv) < 3:
+            usage("Hostname or IP is required for auth")
+        ws = LGTVClient(sys.argv[2])
+        sys.exit[1]
     try:
         ws = LGTVClient()
         args = parseargs(sys.argv[1], sys.argv[2:])
