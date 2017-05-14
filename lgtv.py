@@ -240,7 +240,11 @@ class LGTVClient(WebSocketClient):
 
     def __defaultHandler(self, response):
         # {"type":"response","id":"0","payload":{"returnValue":true}}
+        if response['type'] == "error":
+            print json.dumps(response)
+            sys.exit(1)
         if "returnValue" in response["payload"] and response["payload"]["returnValue"] is True:
+            print json.dumps(response)
             sys.exit(0)
         else:
             print json.dumps(response)
