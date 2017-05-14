@@ -2,40 +2,40 @@
 Command line webOS remote for LGTVs
 
 ## Available Commands
-scan
-auth                  Hostname/IP     Authenticate and exit, creates initial config ~/.lgtv.json
-audioStatus           
-audioVolume           
-closeApp              appid
-getTVChannel          
-input3DOff            
-input3DOn             
-inputChannelDown      
-inputChannelUp        
-inputMediaFastForward  
-inputMediaPause       
-inputMediaPlay        
-inputMediaRewind      
-inputMediaStop        
-listApps              
-listChannels          
-listInputs            
-listServices          
-mute                  muted
-notification          message
-off                   
-on                    
-openAppWithPayload    payload
-openBrowserAt         url
-openYoutubeId         videoid
-openYoutubeURL        url
-setInput              input_id
-setTVChannel          channel
-setVolume             level
-startApp              appid
-swInfo                
-volumeDown            
-volumeUp
+    scan
+    auth                  Hostname/IP     Authenticate and exit, creates initial config ~/.lgtv.json
+    audioStatus           
+    audioVolume           
+    closeApp              appid
+    getTVChannel          
+    input3DOff            
+    input3DOn             
+    inputChannelDown      
+    inputChannelUp        
+    inputMediaFastForward  
+    inputMediaPause       
+    inputMediaPlay        
+    inputMediaRewind      
+    inputMediaStop        
+    listApps              
+    listChannels          
+    listInputs            
+    listServices          
+    mute                  muted
+    notification          message
+    off                   
+    on                    
+    openAppWithPayload    payload
+    openBrowserAt         url
+    openYoutubeId         videoid
+    openYoutubeURL        url
+    setInput              input_id
+    setTVChannel          channel
+    setVolume             level
+    startApp              appid
+    swInfo                
+    volumeDown            
+    volumeUp
 
 ## Install
 
