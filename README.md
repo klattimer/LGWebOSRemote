@@ -1,6 +1,18 @@
 # LGWebOSRemote
 Command line webOS remote for LGTVs
 
+## Supported models
+
+### Tested with
+
+UF830V
+
+Tested with python 2.7 on mac/linux and works fine, your mileage may vary with windows, patches welcome.
+
+### Likely suports
+
+All devices with firmware major version 4, product name "webOSTV 2.0"
+
 ## Available Commands
     scan
     auth                  Hostname/IP     Authenticate and exit, creates initial config ~/.lgtv.json
