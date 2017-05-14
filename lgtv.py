@@ -185,12 +185,12 @@ class LGTVClient(WebSocketClient):
         else:
             self.__hostname = hostname
             if hostname is not None:
+                self.__clientKey = None
                 self.__ip = resolveHost(hostname)
                 self.__macAddress = getMacAddress(self.__ip)
                 self.__store_settings()
             else:
                 self.__ip = None
-            self.__clientKey = None
         self.__handshake_done = False
         super(LGTVClient, self).__init__('ws://' + self.__hostname + ':3000/', exclude_headers=["Origin"])
         self.__waiting_command = None
@@ -198,6 +198,8 @@ class LGTVClient(WebSocketClient):
     def __exec_command(self):
         if self.__handshake_done is False:
             print "Error: Handshake failed"
+        if self.__waiting_command is None or len(self.__waiting_command.keys()) == 0:
+            sys.exit(0)
         command = self.__waiting_command.keys()[0]
         args = self.__waiting_command[command]
         self.__class__.__dict__[command](self, **args)
@@ -457,7 +459,9 @@ if __name__ == '__main__':
         if len(sys.argv) < 3:
             usage("Hostname or IP is required for auth")
         ws = LGTVClient(sys.argv[2])
-        sys.exit[1]
+        ws.connect()
+        ws.run_forever()
+        sys.exit(1)
     try:
         ws = LGTVClient()
         args = parseargs(sys.argv[1], sys.argv[2:])
