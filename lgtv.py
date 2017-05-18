@@ -9,6 +9,7 @@ import subprocess
 import re
 import os
 import sys
+import urllib
 
 
 hello_data = {
@@ -101,27 +102,46 @@ def LGTVScan(first_only=False):
     attempts = 4
     while attempts > 0:
         sock.sendto(request, ('239.255.255.250', 1900))
+        uuid = None
+        model = None
+        address = None
+        data = {}
         try:
             response, address = sock.recvfrom(512)
-        except:
+            # print response
+            for line in response.split('\n'):
+                if line.startswith("USN"):
+                    uuid = re.findall(r'uuid:(.*?):', line)[0]
+                if line.startswith("DLNADeviceName"):
+                    (junk, data) = line.split(':')
+                    data = data.strip()
+                    data = urllib.unquote(data)
+                    model = re.findall(r'\[LG\] webOS TV (.*)', data)[0]
+                data = {
+                    'uuid': uuid,
+                    'model': model,
+                    'address': address[0]
+                }
+        except Exception as e:
+            print e.message
             attempts -= 1
             continue
 
         if re.search('LG', response):
             if first_only:
                 sock.close()
-                return address[0]
+                return data
             else:
-                addresses.append(address[0])
+                addresses.append(data)
 
         attempts -= 1
 
     sock.close()
     if first_only:
-        return None
+        return []
 
     if len(addresses) == 0:
-        return None
+        return []
 
     return list(set(addresses))
 

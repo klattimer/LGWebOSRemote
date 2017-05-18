@@ -51,16 +51,13 @@ All devices with firmware major version 4, product name "webOSTV 2.0"
 
 ## Install
 
-Requires wakeonlan, websocket for python from here git+https://github.com/klattimer/WebSocket-for-Python.git#egg=ws4py
+Requires wakeonlan, websocket for python
 
 There's a requirements.txt included
 
     virtualenv venv
     source venv/bin/activate
     pip install -r requirements.txt
-
-The TV doesn't respond when an Origin header (any origin header) is included, so I upstreamed
-a patch to handle it but waiting on the pull request https://github.com/Lawouach/WebSocket-for-Python/pull/217.
 
 ## Example usage
 
