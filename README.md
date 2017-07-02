@@ -51,7 +51,7 @@ All devices with firmware major version 4, product name "webOSTV 2.0"
 
 ## Install
 
-Requires wakeonlan, websocket for python
+Requires wakeonlan, websocket for python and arp (in Debian/Ubuntu: apt-get install net-tools)
 
 There's a requirements.txt included
 
