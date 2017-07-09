@@ -1,4 +1,4 @@
-    # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from ws4py.client.threadedclient import WebSocketClient
 from types import FunctionType
 from wakeonlan import wol
@@ -220,10 +220,10 @@ class LGTVClient(WebSocketClient):
             print "Error: Handshake failed"
         if self.__waiting_command is None or len(self.__waiting_command.keys()) == 0:
             self.close()
-        else:
-            command = self.__waiting_command.keys()[0]
-            args = self.__waiting_command[command]
-            self.__class__.__dict__[command](self, **args)
+            return
+        command = self.__waiting_command.keys()[0]
+        args = self.__waiting_command[command]
+        self.__class__.__dict__[command](self, **args)
 
     def exec_command(self, command, args):
         if command not in self.__class__.__dict__.keys():
