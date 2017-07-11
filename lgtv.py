@@ -220,6 +220,7 @@ class LGTVClient(WebSocketClient):
             print "Error: Handshake failed"
         if self.__waiting_command is None or len(self.__waiting_command.keys()) == 0:
             self.close()
+            return
         command = self.__waiting_command.keys()[0]
         args = self.__waiting_command[command]
         self.__class__.__dict__[command](self, **args)
