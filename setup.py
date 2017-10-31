@@ -10,7 +10,7 @@ import codecs
 from setuptools import setup
 
 
-LGTV_VERSION = '0.1'
+LGTV_VERSION = '0.1.2'
 LGTV_DOWNLOAD_URL = (
     'https://github.com/klattimer/LGWebOSRemote/tarball/' + LGTV_VERSION
 )
