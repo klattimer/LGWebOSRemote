@@ -37,6 +37,10 @@ setup(
     keywords=[
         'smarthome', 'smarttv', 'lg', 'tv', 'webos', 'remote'
     ],
+    dependency_links=['https://github.com/Lawouach/WebSocket-for-Python.git'],
+    install_requires=[
+        'wakeonlan'
+    ],
     classifiers=[
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
