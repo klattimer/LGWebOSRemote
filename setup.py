@@ -28,7 +28,7 @@ setup(
     packages=['LGTV'],
     version=LGTV_VERSION,
     description='LG WebOS TV Controller.',
-    long_description=read_file('README'),
+    long_description=read_file('README.md'),
     license='MIT',
     author='Karl Lattimer',
     author_email='karl@qdh.org.uk',
