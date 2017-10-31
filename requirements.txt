@@ -1,2 +1,2 @@
 wakeonlan==0.2.2
-git+https://github.com/klattimer/WebSocket-for-Python.git#egg=ws4py
+ws4py==0.4.3.dev0
