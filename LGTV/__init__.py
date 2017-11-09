@@ -246,7 +246,7 @@ class LGTVClient(WebSocketClient):
             self.__waiting_callback = self.__handshake
         else:
             self.__waiting_callback = self.__prompt
-        ws.send(json.dumps(hello_data))
+        self.send(json.dumps(hello_data))
 
     def closed(self, code, reason=None):
         print json.dumps({

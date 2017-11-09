@@ -1,6 +1,6 @@
 import sys
 import json
-from __future__ import print
+from __future__ import print_function
 from inspect import getargspec
 from LGTV import LGTVScan, LGTVClient, getCommands
 
