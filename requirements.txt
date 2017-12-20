@@ -1,3 +1,2 @@
 wakeonlan==0.2.2
-ws4py==0.4.3.dev0
-https://github.com/Lawouach/WebSocket-for-Python.git#egg=ws4py
+git+https://github.com/Lawouach/WebSocket-for-Python.git#egg=ws4py
