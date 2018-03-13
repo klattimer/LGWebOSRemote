@@ -142,7 +142,7 @@ def LGTVScan(first_only=False):
     if len(addresses) == 0:
         return []
 
-    return list(set(addresses))
+    return list(addresses)
 
 
 def resolveHost(hostname):
