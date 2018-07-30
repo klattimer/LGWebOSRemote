@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 import sys
 import json
 from inspect import getargspec
@@ -82,9 +82,10 @@ if __name__ == '__main__':
             try:
                 args = parseargs(sys.argv[1], sys.argv[2:])
             except Exception as e:
-                usage(e.message)
+                usage(str(e))
             ws.connect()
             ws.exec_command(sys.argv[1], args)
             ws.run_forever()
         except KeyboardInterrupt:
             ws.close()
+            
