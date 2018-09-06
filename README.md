@@ -60,7 +60,10 @@ There's a requirements.txt included
     pip install -r requirements.txt
 
 ## Example usage
-
+    # Scan/Authenticate
+    $ python lgtv.py scan 
+    $ python lgtv.py auth <ip returned in scan>
+    
     $ python lgtv.py on
     $ python lgtv.py off
 
