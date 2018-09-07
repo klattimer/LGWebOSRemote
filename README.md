@@ -5,7 +5,7 @@ Command line webOS remote for LGTVs. This tool uses a connection via websockets 
 
 ### Tested with
 
-UF830V, [please add more!]
+UF830V, UH650V [please add more!]
 
 Tested with python 2.7 on mac/linux and works fine, your mileage may vary with windows, patches welcome.
 
