@@ -1,5 +1,6 @@
 from __future__ import print_function
 import sys
+import os
 import json
 from inspect import getargspec
 from LGTV import LGTVScan, LGTVClient, getCommands
@@ -73,6 +74,10 @@ if __name__ == '__main__':
     elif sys.argv[1] == "auth":
         if len(sys.argv) < 3:
             usage("Hostname or IP is required for auth")
+        
+        if os.path.exists(os.path.expanduser("~/.lgtv.json")):
+            os.remove(os.path.expanduser("~/.lgtv.json"))
+            
         ws = LGTVClient(sys.argv[2])
         ws.connect()
         ws.run_forever()
