@@ -10,6 +10,9 @@ import os
 import sys
 import urllib
 
+class HashableDict(dict):
+    def __hash__(self):
+        return hash(frozenset(self.items()))
 
 hello_data = {
     "id": "register_0",
@@ -116,11 +119,11 @@ def LGTVScan(first_only=False):
                     data = data.strip()
                     data = urllib.unquote(data)
                     model = re.findall(r'\[LG\] webOS TV (.*)', data)[0]
-                data = {
+                data = HashableDict({
                     'uuid': uuid,
                     'model': model,
                     'address': address[0]
-                }
+                })
         except Exception as e:
             print e.message
             attempts -= 1
