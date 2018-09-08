@@ -62,7 +62,18 @@ There's a requirements.txt included
 ## Example usage
     # Scan/Authenticate
     $ python lgtv.py scan 
-    $ python lgtv.py auth <ip returned in scan>
+    {
+        "count": 1, 
+        "list": [
+            {
+                "address": "192.168.1.31", 
+                "model": "UF830V", 
+                "uuid": "10f34f86-0664-f223-4b8f-d16a772d9baf"
+            }
+        ], 
+        "result": "ok"
+    }
+    $ python lgtv.py auth 192.168.1.31
     
     $ python lgtv.py on
     $ python lgtv.py off
