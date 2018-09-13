@@ -62,12 +62,12 @@ if __name__ == '__main__':
                 "result": "ok",
                 "count": len(results),
                 "list": results
-            }, sort_keys=True, indent=4)))
+            }, sort_keys=True, indent=4))
         else:
             print (json.dumps({
                 "result": "failed",
                 "count": len(results)
-            }, sort_keys=True, indent=4)))
+            }, sort_keys=True, indent=4))
     elif sys.argv[1] == "on":
         ws = LGTVClient()
         ws.on()
