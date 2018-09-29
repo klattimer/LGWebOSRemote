@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from ws4py.client.threadedclient import WebSocketClient
 from types import FunctionType
-from wakeonlan import wol
+from wakeonlan import send_magic_packet
 import json
 import socket
 import subprocess
@@ -103,7 +103,7 @@ def LGTVScan(first_only=False):
     addresses = []
     attempts = 4
     while attempts > 0:
-        sock.sendto(request, ('239.255.255.250', 1900))
+        sock.sendto(request.encode(), ('239.255.255.250', 1900))
         uuid = None
         model = None
         address = None
@@ -125,7 +125,7 @@ def LGTVScan(first_only=False):
                     'address': address[0]
                 })
         except Exception as e:
-            print e.message
+            print(e)
             attempts -= 1
             continue
 
@@ -219,7 +219,7 @@ class LGTVClient(WebSocketClient):
 
     def __exec_command(self):
         if self.__handshake_done is False:
-            print "Error: Handshake failed"
+            print("Error: Handshake failed")
         if self.__waiting_command is None or len(self.__waiting_command.keys()) == 0:
             self.close()
             return
@@ -252,12 +252,12 @@ class LGTVClient(WebSocketClient):
         self.send(json.dumps(hello_data))
 
     def closed(self, code, reason=None):
-        print json.dumps({
+        print(json.dumps({
             "closing": {
                 "code": code,
                 "reason": reason
             }
-        })
+        }))
 
     def received_message(self, response):
         if self.__waiting_callback:
@@ -266,18 +266,18 @@ class LGTVClient(WebSocketClient):
     def __defaultHandler(self, response):
         # {"type":"response","id":"0","payload":{"returnValue":true}}
         if response['type'] == "error":
-            print json.dumps(response)
+            print(json.dumps(response))
             self.close()
         if "returnValue" in response["payload"] and response["payload"]["returnValue"] is True:
-            print json.dumps(response)
+            print(json.dumps(response))
             self.close()
         else:
-            print json.dumps(response)
+            print(json.dumps(response))
 
     def __prompt(self, response):
         # {"type":"response","id":"register_0","payload":{"pairingType":"PROMPT","returnValue":true}}
         if response['payload']['pairingType'] == "PROMPT":
-            print "Please accept the pairing request on your LG TV"
+            print("Please accept the pairing request on your LG TV")
             self.__waiting_callback = self.__set_client_key
 
     def __handshake(self, response):
@@ -295,8 +295,8 @@ class LGTVClient(WebSocketClient):
 
     def on(self):
         if not self.__macAddress:
-            print "Client must have been powered on and paired before power on works"
-        wol.send_magic_packet(self.__macAddress)
+            print("Client must have been powered on and paired before power on works")
+        send_magic_packet(self.__macAddress)
 
     def off(self):
         self.__send_command("", "request", "ssap://system/turnOff")

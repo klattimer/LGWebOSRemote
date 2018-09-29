@@ -7,7 +7,15 @@ Command line webOS remote for LGTVs. This tool uses a connection via websockets 
 
 UF830V, UH650V [please add more!]
 
-Tested with python 2.7 on mac/linux and works fine, your mileage may vary with windows, patches welcome.
+Tested and works with python 2.7/3.6 on mac and python 2.7 on linux. Your mileage may vary with windows, patches welcome.
+
+**OS and Python support:**
+
+| | python 2.6 | python 3.6 |
+|-|:-:|:-:|
+| **Mac** | yes | yes |
+| **Linux** | yes | ? |
+| **Windows** | - | - |
 
 ### Likely supports
 
@@ -61,20 +69,20 @@ There's a requirements.txt included
 
 ## Example usage
     # Scan/Authenticate
-    $ python lgtv.py scan 
+    $ python lgtv.py scan
     {
-        "count": 1, 
+        "count": 1,
         "list": [
             {
-                "address": "192.168.1.31", 
-                "model": "UF830V", 
+                "address": "192.168.1.31",
+                "model": "UF830V",
                 "uuid": "10f34f86-0664-f223-4b8f-d16a772d9baf"
             }
-        ], 
+        ],
         "result": "ok"
     }
     $ python lgtv.py auth 192.168.1.31
-    
+
     $ python lgtv.py on
     $ python lgtv.py off
 
