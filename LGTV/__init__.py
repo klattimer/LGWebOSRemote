@@ -8,11 +8,19 @@ import subprocess
 import re
 import os
 import sys
-import urllib
+
+try:
+    import urllib.parse
+    _urllib_parse_unquote = urllib.parse.unquote
+except ImportError:
+    import urllib
+    _urllib_parse_unquote = urllib.unquote
+
 
 class HashableDict(dict):
     def __hash__(self):
         return hash(frozenset(self.items()))
+
 
 hello_data = {
     "id": "register_0",
@@ -91,11 +99,11 @@ hello_data = {
 
 
 def LGTVScan(first_only=False):
-    request = 'M-SEARCH * HTTP/1.1\r\n' \
-              'HOST: 239.255.255.250:1900\r\n' \
-              'MAN: "ssdp:discover"\r\n' \
-              'MX: 2\r\n' \
-              'ST: urn:schemas-upnp-org:device:MediaRenderer:1\r\n\r\n'
+    request = b'M-SEARCH * HTTP/1.1\r\n' \
+              b'HOST: 239.255.255.250:1900\r\n' \
+              b'MAN: "ssdp:discover"\r\n' \
+              b'MX: 2\r\n' \
+              b'ST: urn:schemas-upnp-org:device:MediaRenderer:1\r\n\r\n'
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.settimeout(1)
@@ -117,7 +125,7 @@ def LGTVScan(first_only=False):
                 if line.startswith("DLNADeviceName"):
                     (junk, data) = line.split(':')
                     data = data.strip()
-                    data = urllib.unquote(data)
+                    data = _urllib_parse_unquote(data)
                     model = re.findall(r'\[LG\] webOS TV (.*)', data)[0]
                 data = HashableDict({
                     'uuid': uuid,
@@ -125,7 +133,7 @@ def LGTVScan(first_only=False):
                     'address': address[0]
                 })
         except Exception as e:
-            print e.message
+            print(e.message)
             attempts -= 1
             continue
 
@@ -219,11 +227,11 @@ class LGTVClient(WebSocketClient):
 
     def __exec_command(self):
         if self.__handshake_done is False:
-            print "Error: Handshake failed"
+            print("Error: Handshake failed")
         if self.__waiting_command is None or len(self.__waiting_command.keys()) == 0:
             self.close()
             return
-        command = self.__waiting_command.keys()[0]
+        command = list(self.__waiting_command.keys())[0]
         args = self.__waiting_command[command]
         self.__class__.__dict__[command](self, **args)
 
@@ -252,12 +260,12 @@ class LGTVClient(WebSocketClient):
         self.send(json.dumps(hello_data))
 
     def closed(self, code, reason=None):
-        print json.dumps({
+        print(json.dumps({
             "closing": {
                 "code": code,
-                "reason": reason
+                "reason": reason.decode('utf-8')
             }
-        })
+        }))
 
     def received_message(self, response):
         if self.__waiting_callback:
@@ -266,18 +274,18 @@ class LGTVClient(WebSocketClient):
     def __defaultHandler(self, response):
         # {"type":"response","id":"0","payload":{"returnValue":true}}
         if response['type'] == "error":
-            print json.dumps(response)
+            print(json.dumps(response))
             self.close()
         if "returnValue" in response["payload"] and response["payload"]["returnValue"] is True:
-            print json.dumps(response)
+            print(json.dumps(response))
             self.close()
         else:
-            print json.dumps(response)
+            print(json.dumps(response))
 
     def __prompt(self, response):
         # {"type":"response","id":"register_0","payload":{"pairingType":"PROMPT","returnValue":true}}
         if response['payload']['pairingType'] == "PROMPT":
-            print "Please accept the pairing request on your LG TV"
+            print("Please accept the pairing request on your LG TV")
             self.__waiting_callback = self.__set_client_key
 
     def __handshake(self, response):
@@ -295,7 +303,7 @@ class LGTVClient(WebSocketClient):
 
     def on(self):
         if not self.__macAddress:
-            print "Client must have been powered on and paired before power on works"
+            print("Client must have been powered on and paired before power on works")
         wol.send_magic_packet(self.__macAddress)
 
     def off(self):
