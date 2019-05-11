@@ -52,7 +52,7 @@ def parseargs(command, argv):
         output[a] = argv[i]
     return output
 
-if __name__ == '__main__':
+def main():
     if len(sys.argv) < 2:
         usage("Too few arguments")
     elif sys.argv[1] == "scan":
@@ -93,3 +93,6 @@ if __name__ == '__main__':
             ws.run_forever()
         except KeyboardInterrupt:
             ws.close()
+
+if __name__ == '__main__':
+    main()

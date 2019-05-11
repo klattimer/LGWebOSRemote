@@ -42,6 +42,7 @@ setup(
         'wakeonlan',
         'ws4py'
     ],
+    entry_points={'console_scripts': ['lgtv = LGTV.main:main']},
     classifiers=[
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
