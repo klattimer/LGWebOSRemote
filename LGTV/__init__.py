@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from ws4py.client.threadedclient import WebSocketClient
 from types import FunctionType
-from wakeonlan import wol
 import json
 import socket
 import subprocess
 import re
 import os
 import sys
+import wakeonlan
 
 try:
     import urllib.parse
@@ -304,7 +304,7 @@ class LGTVClient(WebSocketClient):
     def on(self):
         if not self.__macAddress:
             print("Client must have been powered on and paired before power on works")
-        wol.send_magic_packet(self.__macAddress)
+        wakeonlan.send_magic_packet(self.__macAddress)
 
     def off(self):
         self.__send_command("", "request", "ssap://system/turnOff")
