@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from ws4py.client.threadedclient import WebSocketClient
 from types import FunctionType
-from wakeonlan import wol
 import json
 import socket
 import subprocess
 import re
 import os
 import sys
+import wakeonlan
 
 try:
     import urllib.parse
@@ -119,7 +119,7 @@ def LGTVScan(first_only=False):
         try:
             response, address = sock.recvfrom(512)
             # print response
-            for line in response.split('\n'):
+            for line in response.decode().split('\n'):
                 if line.startswith("USN"):
                     uuid = re.findall(r'uuid:(.*?):', line)[0]
                 if line.startswith("DLNADeviceName"):
@@ -137,7 +137,7 @@ def LGTVScan(first_only=False):
             attempts -= 1
             continue
 
-        if re.search('LG', response):
+        if re.search('LG', response.decode()):
             if first_only:
                 sock.close()
                 return data
@@ -162,7 +162,7 @@ def resolveHost(hostname):
 
 def getMacAddress(address):
     pid = subprocess.Popen(["arp", "-n", address], stdout=subprocess.PIPE)
-    s = pid.communicate()[0]
+    s = pid.communicate()[0].decode()
     matches = re.search(r"(([a-f\d]{1,2}\:){5}[a-f\d]{1,2})", s)
     if not matches:
         return None
@@ -304,7 +304,7 @@ class LGTVClient(WebSocketClient):
     def on(self):
         if not self.__macAddress:
             print("Client must have been powered on and paired before power on works")
-        wol.send_magic_packet(self.__macAddress)
+        wakeonlan.send_magic_packet(self.__macAddress)
 
     def off(self):
         self.__send_command("", "request", "ssap://system/turnOff")

@@ -37,11 +37,11 @@ setup(
     keywords=[
         'smarthome', 'smarttv', 'lg', 'tv', 'webos', 'remote'
     ],
-    dependency_links=['https://github.com/Lawouach/WebSocket-for-Python.git#egg=ws4py-0.4.3dev0'],
     install_requires=[
         'wakeonlan',
         'ws4py'
     ],
+    entry_points={'console_scripts': ['lgtv = LGTV.main:main']},
     classifiers=[
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
