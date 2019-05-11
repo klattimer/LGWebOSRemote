@@ -58,15 +58,13 @@ All devices with firmware major version 4, product name "webOSTV 2.0"
 
 Requires wakeonlan, websocket for python and arp (in Debian/Ubuntu: apt-get install net-tools)
 
-There's a requirements.txt included
-
-    virtualenv venv
-    source venv/bin/activate
-    pip install -r requirements.txt
+    python -m venv lgtv-venv
+    source lgtv-venv/bin/activate
+    pip install git+https://github.com/klattimer/LGWebOSRemote
 
 ## Example usage
     # Scan/Authenticate
-    $ python lgtv.py scan 
+    $ lgtv scan 
     {
         "count": 1, 
         "list": [
@@ -78,16 +76,16 @@ There's a requirements.txt included
         ], 
         "result": "ok"
     }
-    $ python lgtv.py auth 192.168.1.31
+    $ lgtv auth 192.168.1.31
     
-    $ python lgtv.py on
-    $ python lgtv.py off
+    $ lgtv on
+    $ lgtv off
 
     # If you have the youtube plugin
-    $ python lgtv.py openYoutubeURL https://www.youtube.com/watch?v=dQw4w9WgXcQ
+    $ lgtv openYoutubeURL https://www.youtube.com/watch?v=dQw4w9WgXcQ
 
     # Otherwise, this works reasonably well
-    $ python lgtv.py openBrowserAt https://www.youtube.com/tv#/watch?v=dQw4w9WgXcQ
+    $ lgtv openBrowserAt https://www.youtube.com/tv#/watch?v=dQw4w9WgXcQ
 
 ## Caveats
 
