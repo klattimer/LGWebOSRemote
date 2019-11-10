@@ -5,6 +5,7 @@ import socket
 import requests
 import base64
 import json
+import os
 
 from .payload import hello_data
 
@@ -159,7 +160,11 @@ class LGTVRemote(WebSocketClient):
         self.__send_command("request", "ssap://system.notifications/createToast", {"message": message}, callback)
 
     def notificationWithIcon(self, message, url, callback=None):
-        content = requests.get(url).content
+        if os.path.exists(url):
+            with open(url) as f:
+                content = f.read()
+        else:
+            content = requests.get(url).content
         data = base64.b64encode(content)
         data = {"iconData": data, "iconExtension": "png", "message": message}
         self.__send_command("request", "ssap://system.notifications/createToast", data, callback)

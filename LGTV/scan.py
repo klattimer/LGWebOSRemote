@@ -1,6 +1,7 @@
 import socket
 import re
 from urllib.parse import unquote
+import json
 
 
 def LGTVScan():
@@ -22,22 +23,25 @@ def LGTVScan():
         address = None
         data = {}
         response, address = sock.recvfrom(512)
-        for line in response.split('\n'):
+        for line in response.split(b'\n'):
             if line.startswith("USN"):
                 uuid = re.findall(r'uuid:(.*?):', line)[0]
             if line.startswith("DLNADeviceName"):
-                (junk, data) = line.split(':')
+                (junk, data) = line.split(b':')
                 data = data.strip()
                 data = unquote(data)
-                model = re.findall(r'\[LG\] webOS TV (.*)', data)[0]
+                model = re.findall(r'\[LG\] webOS TV (.*)', data.decode('utf-8'))[0]
             data = {
                 'uuid': uuid,
                 'model': model,
                 'address': address[0]
             }
 
-        if re.search('LG', response):
+        if re.search(b'LG', response):
             addresses.append(data)
+        else:
+            print ('Unknown device')
+            print (json.dumps(data))
 
     sock.close()
     return list(set(addresses))
