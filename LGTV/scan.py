@@ -1,7 +1,6 @@
 import socket
 import re
 from urllib.parse import unquote
-import json
 from time import sleep
 
 
