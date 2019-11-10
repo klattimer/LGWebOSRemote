@@ -5,6 +5,7 @@ import socket
 import requests
 import base64
 import json
+import os
 
 from .payload import hello_data
 
@@ -35,7 +36,7 @@ class LGTVRemote(WebSocketClient):
     def __init__(self, name, ip=None, mac=None, key=None, hostname=None):
         self.__command_count = 0
         self.__waiting_callback = None
-        self.__commands = None
+        self.__commands = []
         self.__handshake_done = False
 
         self.__hostname = hostname
@@ -81,7 +82,7 @@ class LGTVRemote(WebSocketClient):
         print (json.dumps({
             "closing": {
                 "code": code,
-                "reason": reason
+                "reason": reason.decode('utf-8')
             }
         }))
 
@@ -101,12 +102,13 @@ class LGTVRemote(WebSocketClient):
     def __execute(self):
         if self.__handshake_done is False:
             print ("Error: Handshake failed")
-        if self.__waiting_command is None or len(self.__waiting_command.keys()) == 0:
-            self.close()
-            return
-        command = self.__waiting_command.keys()[0]
-        args = self.__waiting_command[command]
-        self.__class__.__dict__[command](self, **args)
+
+        while len(self.__commands) > 0:
+            command = self.__commands.pop(0)
+            method = list(command.keys())[0]
+            args = command[method]
+            self.__class__.__dict__[method](self, **args)
+        self.close()
 
     def __defaultHandler(self, response):
         # {"type":"response","id":"0","payload":{"returnValue":true}}
@@ -135,7 +137,8 @@ class LGTVRemote(WebSocketClient):
         }
         if type(payload) == dict:
             payload = json.dumps(payload)
-        elif type(payload) == str and len(payload) > 2:
+
+        if type(payload) == str and len(payload) > 2:
             message_data['payload'] = payload
 
         self.__command_count += 1
@@ -159,7 +162,11 @@ class LGTVRemote(WebSocketClient):
         self.__send_command("request", "ssap://system.notifications/createToast", {"message": message}, callback)
 
     def notificationWithIcon(self, message, url, callback=None):
-        content = requests.get(url).content
+        if os.path.exists(url):
+            with open(url) as f:
+                content = f.read()
+        else:
+            content = requests.get(url).content
         data = base64.b64encode(content)
         data = {"iconData": data, "iconExtension": "png", "message": message}
         self.__send_command("request", "ssap://system.notifications/createToast", data, callback)

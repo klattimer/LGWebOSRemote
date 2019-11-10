@@ -140,6 +140,7 @@ def main():
         if filename is not None:
             with open(filename, 'w') as f:
                 f.write(json.dumps(config))
+            print ("Wrote config file: " + filename)
 
         sys.exit(0)
     elif sys.argv[2] == "on":
