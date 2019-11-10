@@ -102,12 +102,12 @@ class LGTVRemote(WebSocketClient):
     def __execute(self):
         if self.__handshake_done is False:
             print ("Error: Handshake failed")
-        if self.__waiting_command is None or len(self.__waiting_command.keys()) == 0:
-            self.close()
-            return
-        command = self.__waiting_command.keys()[0]
-        args = self.__waiting_command[command]
-        self.__class__.__dict__[command](self, **args)
+
+        while len(self.__commands) > 0:
+            command = self.__commands.pop(0)
+            method = command.keys()[0]
+            args = command[method]
+            self.__class__.__dict__[method](self, **args)
 
     def __defaultHandler(self, response):
         # {"type":"response","id":"0","payload":{"returnValue":true}}
