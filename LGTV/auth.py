@@ -19,7 +19,7 @@ class LGTVAuth(WebSocketClient):
         try:
             socket.inet_aton(host)
             self.__ip = host
-            self.__hostname = socket.gethostbyaddr(host)
+            self.__hostname = socket.gethostbyaddr(host)[0]
         except:
             self.__hostname = host
             self.__ip = socket.gethostbyname(host)
