@@ -43,4 +43,5 @@ def LGTVScan():
             print (json.dumps(data))
 
     sock.close()
+    addresses = {x['address']: x for x in addresses}.values()
     return list(set(addresses))
