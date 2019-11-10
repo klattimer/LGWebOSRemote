@@ -1,0 +1,13 @@
+Source: lgtv
+Section: python
+Priority: extra
+Maintainer: Karl Lattimer <karl@qdh.org.uk>
+Build-Depends: debhelper (>= 9), python3, dh-virtualenv (>= 1.0),
+    python3-setuptools, python3-pip, python3-dev, libffi-dev
+Standards-Version: 3.9.5
+
+Package: lgtv
+Architecture: any
+Pre-Depends: dpkg (>= 1.16.1), python3, ${misc:Pre-Depends}
+Depends: ${misc:Depends}
+Description: A remote for LG TV's running webOS

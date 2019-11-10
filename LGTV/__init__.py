@@ -1,417 +1,169 @@
 # -*- coding: utf-8 -*-
-from ws4py.client.threadedclient import WebSocketClient
-from types import FunctionType
+from __future__ import print_function
+from inspect import getargspec
 import json
-import socket
-import subprocess
-import re
 import os
 import sys
-import wakeonlan
+from time import sleep
 
-try:
-    import urllib.parse
-    _urllib_parse_unquote = urllib.parse.unquote
-except ImportError:
-    import urllib
-    _urllib_parse_unquote = urllib.unquote
+from .scan import LGTVScan
+from .remote import LGTVRemote
+from .auth import LGTVAuth
 
 
-class HashableDict(dict):
-    def __hash__(self):
-        return hash(frozenset(self.items()))
+search_config = [
+    "/etc/lgtv/config.json",
+    "~/.lgtv/config.json",
+    "/opt/venvs/lgtv/config/config.json"
+]
 
 
-hello_data = {
-    "id": "register_0",
-    "payload": {
-        "forcePairing": False,
-        "manifest": {
-            "appVersion": "1.1",
-            "manifestVersion": 1,
-            "permissions": [
-                "LAUNCH",
-                "LAUNCH_WEBAPP",
-                "APP_TO_APP",
-                "CLOSE",
-                "TEST_OPEN",
-                "TEST_PROTECTED",
-                "CONTROL_AUDIO",
-                "CONTROL_DISPLAY",
-                "CONTROL_INPUT_JOYSTICK",
-                "CONTROL_INPUT_MEDIA_RECORDING",
-                "CONTROL_INPUT_MEDIA_PLAYBACK",
-                "CONTROL_INPUT_TV",
-                "CONTROL_POWER",
-                "READ_APP_STATUS",
-                "READ_CURRENT_CHANNEL",
-                "READ_INPUT_DEVICE_LIST",
-                "READ_NETWORK_STATE",
-                "READ_RUNNING_APPS",
-                "READ_TV_CHANNEL_LIST",
-                "WRITE_NOTIFICATION_TOAST",
-                "READ_POWER_STATE",
-                "READ_COUNTRY_INFO"
-            ],
-            "signatures": [
-                {
-                    "signature": "eyJhbGdvcml0aG0iOiJSU0EtU0hBMjU2Iiwia2V5SWQiOiJ0ZXN0LXNpZ25pbmctY2VydCIsInNpZ25hdHVyZVZlcnNpb24iOjF9.hrVRgjCwXVvE2OOSpDZ58hR+59aFNwYDyjQgKk3auukd7pcegmE2CzPCa0bJ0ZsRAcKkCTJrWo5iDzNhMBWRyaMOv5zWSrthlf7G128qvIlpMT0YNY+n/FaOHE73uLrS/g7swl3/qH/BGFG2Hu4RlL48eb3lLKqTt2xKHdCs6Cd4RMfJPYnzgvI4BNrFUKsjkcu+WD4OO2A27Pq1n50cMchmcaXadJhGrOqH5YmHdOCj5NSHzJYrsW0HPlpuAx/ECMeIZYDh6RMqaFM2DXzdKX9NmmyqzJ3o/0lkk/N97gfVRLW5hA29yeAwaCViZNCP8iC9aO0q9fQojoa7NQnAtw==",
-                    "signatureVersion": 1
-                }
-            ],
-            "signed": {
-                "appId": "com.lge.test",
-                "created": "20140509",
-                "localizedAppNames": {
-                    "": "LG Remote App",
-                    "ko-KR": u"리모컨 앱",
-                    "zxx-XX": u"ЛГ Rэмotэ AПП"
-                },
-                "localizedVendorNames": {
-                    "": "LG Electronics"
-                },
-                "permissions": [
-                    "TEST_SECURE",
-                    "CONTROL_INPUT_TEXT",
-                    "CONTROL_MOUSE_AND_KEYBOARD",
-                    "READ_INSTALLED_APPS",
-                    "READ_LGE_SDX",
-                    "READ_NOTIFICATIONS",
-                    "SEARCH",
-                    "WRITE_SETTINGS",
-                    "WRITE_NOTIFICATION_ALERT",
-                    "CONTROL_POWER",
-                    "READ_CURRENT_CHANNEL",
-                    "READ_RUNNING_APPS",
-                    "READ_UPDATE_INFO",
-                    "UPDATE_FROM_REMOTE_APP",
-                    "READ_LGE_TV_INPUT_EVENTS",
-                    "READ_TV_CURRENT_TIME"
-                ],
-                "serial": "2f930e2d2cfe083771f68e4fe7bb07",
-                "vendorId": "com.lge"
-            }
-        },
-        "pairingType": "PROMPT"
-    },
-    "type": "register"
-}
+def usage(error=None):
+    if error:
+        print ("Error: " + error)
+    print ("LGTV Controller")
+    print ("Author: Karl Lattimer <karl@qdh.org.uk>")
+    print ("Usage: lgtv <command> [parameter]\n")
+    print ("Available Commands:")
+
+    print ("  -i                    interactive mode")
+
+    print ("  scan")
+    print ("  auth <host>")
+
+    commands = LGTVRemote.getCommands()
+    for c in commands:
+        args = getargspec(LGTVRemote.__dict__[c])
+        if len(args.args) > 1:
+            a = ' <' + '> <'.join(args.args[1:-1]) + '>'
+            print ('  ' + c + a)
+        else:
+            print ('  ' + c)
 
 
-def LGTVScan(first_only=False):
-    request = b'M-SEARCH * HTTP/1.1\r\n' \
-              b'HOST: 239.255.255.250:1900\r\n' \
-              b'MAN: "ssdp:discover"\r\n' \
-              b'MX: 2\r\n' \
-              b'ST: urn:schemas-upnp-org:device:MediaRenderer:1\r\n\r\n'
+def parseargs(command, argv):
+    args = getargspec(LGTVRemote.__dict__[command])
+    args = args.args[1:-1]
 
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.settimeout(1)
+    if len(args) != len(argv):
+        raise Exception("Argument lengths do not match")
 
-    addresses = []
-    attempts = 4
-    while attempts > 0:
-        sock.sendto(request, ('239.255.255.250', 1900))
-        uuid = None
-        model = None
-        address = None
-        data = {}
+    output = {}
+    for (i, a) in enumerate(args):
+        if argv[i].lower() == "true":
+            argv[i] = True
+        elif argv[i].lower() == "false":
+            argv[i] = False
         try:
-            response, address = sock.recvfrom(512)
-            # print response
-            for line in response.decode().split('\n'):
-                if line.startswith("USN"):
-                    uuid = re.findall(r'uuid:(.*?):', line)[0]
-                if line.startswith("DLNADeviceName"):
-                    (junk, data) = line.split(':')
-                    data = data.strip()
-                    data = _urllib_parse_unquote(data)
-                    model = re.findall(r'\[LG\] webOS TV (.*)', data)[0]
-                data = HashableDict({
-                    'uuid': uuid,
-                    'model': model,
-                    'address': address[0]
-                })
+            f = int(argv[i])
+            argv[i] = f
+        except:
+            try:
+                f = float(argv[i])
+                argv[i] = f
+            except:
+                pass
+        output[a] = argv[i]
+    return output
+
+
+def find_config():
+    w = None
+    for f in search_config:
+        f = os.path.expanduser(f)
+        f = os.path.abspath(f)
+        d = os.path.dirname(f)
+        if os.path.exists(d):
+            if os.access(d, os.W_OK):
+                w = f
+            if os.path.exists(f):
+                if os.access(f, os.W_OK):
+                    return f
+        elif os.access(os.path.dirname(d), os.W_OK):
+            os.makedirs(d)
+            w = f
+    if w is None:
+        print ("Cannot find suitable config path to write, create one in %s" % ' or '.join(search_config))
+        raise Exception("No config file")
+    return w
+
+
+def main():
+    if len(sys.argv) < 2:
+        usage("Too few arguments")
+        sys.exit(1)
+
+    command = None
+    filename = None
+    config = {}
+
+    filename = find_config()
+    if filename is not None:
+        try:
+            with open(filename) as f:
+                config = json.loads(f.read())
+        except:
+            pass
+
+    if sys.argv[1] == "scan":
+        results = LGTVScan()
+        if len(results) > 0:
+            print (json.dumps({
+                "result": "ok",
+                "count": len(results),
+                "list": results
+            }))
+            sys.exit(0)
+        else:
+            print (json.dumps({
+                "result": "failed",
+                "count": len(results)
+            }))
+            sys.exit(1)
+
+    if sys.argv[1] == "-i":
+        pass
+    elif sys.argv[1] == "auth":
+        if len(sys.argv) < 3:
+            usage("Hostname or IP is required for auth")
+            sys.exit(1)
+        if len(sys.argv) < 4:
+            usage("TV name is required for auth")
+            sys.exit(1)
+        name = sys.argv[3]
+        host = sys.argv[2]
+        ws = LGTVAuth(name, host)
+        ws.connect()
+        ws.run_forever()
+        sleep(1)
+        config = ws.serialise()
+        if filename is not None:
+            with open(filename, 'w') as f:
+                f.write(json.dumps(config))
+
+        sys.exit(0)
+    elif sys.argv[2] == "on":
+        name = sys.argv[1]
+        ws = LGTVRemote(name, **config[name])
+        ws.on()
+        sys.exit(0)
+    else:
+        try:
+            args = parseargs(sys.argv[2], sys.argv[3:])
+            name = sys.argv[1]
+            command = sys.argv[2]
         except Exception as e:
-            print(e.message)
-            attempts -= 1
-            continue
+            usage(e.message)
+            sys.exit(1)
 
-        if re.search('LG', response.decode()):
-            if first_only:
-                sock.close()
-                return data
-            else:
-                addresses.append(data)
+    try:
+        ws = LGTVRemote(name, **config[name])
+        ws.connect()
+        if command is not None:
+            ws.execute(command, args)
+        ws.run_forever()
+    except KeyboardInterrupt:
+        ws.close()
 
-        attempts -= 1
-
-    sock.close()
-    if first_only:
-        return []
-
-    if len(addresses) == 0:
-        return []
-
-    return list(set(addresses))
-
-
-def resolveHost(hostname):
-    return socket.gethostbyname(hostname)
-
-
-def getMacAddress(address):
-    pid = subprocess.Popen(["arp", "-n", address], stdout=subprocess.PIPE)
-    s = pid.communicate()[0].decode()
-    matches = re.search(r"(([a-f\d]{1,2}\:){5}[a-f\d]{1,2})", s)
-    if not matches:
-        return None
-    mac = matches.groups()[0]
-    m = mac.split(':')
-    mac = ':'.join(['%02x' % int(x, 16) for x in m])
-    return mac
-
-
-def methods(cls):
-    return [x for x, y in cls.__dict__.items() if type(y) == FunctionType]
-
-
-def getCommands(cls):
-    excludes = [
-        'opened',
-        'closed',
-        'received_message',
-        'exec_command'
-    ]
-    out = []
-    m = methods(cls)
-    for method in m:
-        if method.startswith("_" + cls.__name__):
-            continue
-        if method in excludes:
-            continue
-        if method.startswith("__"):
-            continue
-        out.append(method)
-    out.sort()
-    return out
-
-
-class LGTVClient(WebSocketClient):
-    def __init__(self, hostname=None):
-        self.__command_count = 0
-        self.__waiting_callback = None
-        if os.path.exists(os.path.expanduser("~/.lgtv.json")):
-            f = open(os.path.expanduser("~/.lgtv.json"))
-            settings = json.loads(f.read())
-            f.close()
-            self.__hostname = settings['hostname']
-            self.__clientKey = settings["client-key"]
-            self.__ip = settings['ip']
-            self.__macAddress = settings['mac-address']
-            if not self.__macAddress and self.__ip is not None:
-                self.__macAddress = getMacAddress(self.__ip)
-                self.__store_settings()
-        else:
-            self.__hostname = hostname
-            if hostname is not None:
-                self.__clientKey = None
-                self.__ip = resolveHost(hostname)
-                self.__macAddress = getMacAddress(self.__ip)
-                self.__store_settings()
-            else:
-                self.__ip = None
-        self.__handshake_done = False
-        super(LGTVClient, self).__init__('ws://' + self.__hostname + ':3000/', exclude_headers=["Origin"])
-        self.__waiting_command = None
-
-    def __exec_command(self):
-        if self.__handshake_done is False:
-            print("Error: Handshake failed")
-        if self.__waiting_command is None or len(self.__waiting_command.keys()) == 0:
-            self.close()
-            return
-        command = list(self.__waiting_command.keys())[0]
-        args = self.__waiting_command[command]
-        self.__class__.__dict__[command](self, **args)
-
-    def exec_command(self, command, args):
-        if command not in self.__class__.__dict__.keys():
-            usage("Invalid command")
-        self.__waiting_command = {command: args}
-
-    def __store_settings(self):
-        data = {
-            "client-key": self.__clientKey,
-            "mac-address": self.__macAddress,
-            "ip": self.__ip,
-            "hostname": self.__hostname
-        }
-        f = open(os.path.expanduser("~/.lgtv.json"), "w")
-        f.write(json.dumps(data))
-        f.close()
-
-    def opened(self):
-        if self.__clientKey:
-            hello_data['payload']['client-key'] = self.__clientKey
-            self.__waiting_callback = self.__handshake
-        else:
-            self.__waiting_callback = self.__prompt
-        self.send(json.dumps(hello_data))
-
-    def closed(self, code, reason=None):
-        print(json.dumps({
-            "closing": {
-                "code": code,
-                "reason": reason.decode('utf-8')
-            }
-        }))
-
-    def received_message(self, response):
-        if self.__waiting_callback:
-            self.__waiting_callback(json.loads(str(response)))
-
-    def __defaultHandler(self, response):
-        # {"type":"response","id":"0","payload":{"returnValue":true}}
-        if response['type'] == "error":
-            print(json.dumps(response))
-            self.close()
-        if "returnValue" in response["payload"] and response["payload"]["returnValue"] is True:
-            print(json.dumps(response))
-            self.close()
-        else:
-            print(json.dumps(response))
-
-    def __prompt(self, response):
-        # {"type":"response","id":"register_0","payload":{"pairingType":"PROMPT","returnValue":true}}
-        if response['payload']['pairingType'] == "PROMPT":
-            print("Please accept the pairing request on your LG TV")
-            self.__waiting_callback = self.__set_client_key
-
-    def __handshake(self, response):
-        if 'client-key' in response['payload'].keys():
-            self.__handshake_done = True
-            self.__exec_command()
-
-    def __set_client_key(self, response):
-        # {"type":"registered","id":"register_0","payload":{"client-key":"a40635497f685492b8366e208808a86b"}}
-        if 'client-key' in response['payload'].keys():
-            self.__clientKey = response['payload']['client-key']
-            self.__waiting_callback = None
-            self.__store_settings()
-        self.__handshake(response)
-
-    def on(self):
-        if not self.__macAddress:
-            print("Client must have been powered on and paired before power on works")
-        wakeonlan.send_magic_packet(self.__macAddress)
-
-    def off(self):
-        self.__send_command("", "request", "ssap://system/turnOff")
-
-    def openBrowserAt(self, url, callback=None):
-        self.__send_command("", "request", "ssap://system.launcher/open", {"target": url}, callback)
-
-    def notification(self, message, callback=None):
-        self.__send_command("", "request", "ssap://system.notifications/createToast", {"message": message}, callback)
-
-    def mute(self, muted=True, callback=None):
-        self.__send_command("", "request", "ssap://audio/setMute", {"mute": muted}, callback)
-
-    def audioStatus(self, callback=None):
-        self.__send_command("status_", "request", "ssap://audio/getStatus", None, callback)
-
-    def audioVolume(self, callback=None):
-        self.__send_command("status_", "request", "ssap://audio/getVolume", None, callback)
-
-    def setVolume(self, level, callback=None):
-        self.__send_command("", "request", "ssap://audio/setVolume", {"volume": level}, callback)
-
-    def volumeUp(self, callback=None):
-        self.__send_command("volumeup_", "request", "ssap://audio/volumeUp", None, callback)
-
-    def volumeDown(self, callback=None):
-        self.__send_command("volumedown_", "request", "ssap://audio/volumeDown", None, callback)
-
-    def inputMediaPlay(self, callback=None):
-        self.__send_command("", "request", "ssap://media.controls/play", None, callback)
-
-    def inputMediaStop(self, callback=None):
-        self.__send_command("", "request", "ssap://media.controls/stop", None, callback)
-
-    def inputMediaPause(self, callback=None):
-        self.__send_command("", "request", "ssap://media.controls/pause", None, callback)
-
-    def inputMediaRewind(self, callback=None):
-        self.__send_command("", "request", "ssap://media.controls/rewind", None, callback)
-
-    def inputMediaFastForward(self, callback=None):
-        self.__send_command("", "request", "ssap://media.controls/fastForward", None, callback)
-
-    def inputChannelUp(self, callback=None):
-        self.__send_command("", "request", "ssap://tv/channelUp", None, callback)
-
-    def inputChannelDown(self, callback=None):
-        self.__send_command("", "request", "ssap://tv/channelDown", None, callback)
-
-    def setTVChannel(self, channel, callback=None):
-        self.__send_command("", "request", "ssap://tv/openChannel", {"channelId": channel}, callback)
-
-    def getTVChannel(self, callback=None):
-        self.__send_command("channels_", "request", "ssap://tv/getCurrentChannel", None, callback)
-
-    def listChannels(self, callback=None):
-        self.__send_command("channels_", "request", "ssap://tv/getChannelList", None, callback)
-
-    def input3DOn(self, callback=None):
-        self.__send_command("", "request", "ssap://com.webos.service.tv.display/set3DOn", None, callback)
-
-    def input3DOff(self, callback=None):
-        self.__send_command("", "request", "ssap://com.webos.service.tv.display/set3DOff", None, callback)
-
-    def listInputs(self, callback=None):
-        self.__send_command("input_", "request", "ssap://tv/getExternalInputList", None, callback)
-
-    def setInput(self, input_id, callback=None):
-        self.__send_command("", "request", "ssap://tv/switchInput", {"inputId": input_id}, callback)
-
-    def swInfo(self, callback=None):
-        self.__send_command("sw_info_", "request", "ssap://com.webos.service.update/getCurrentSWInformation", None, callback)
-
-    def listServices(self, callback=None):
-        self.__send_command("services_", "request", "ssap://api/getServiceList", None, callback)
-
-    def listApps(self, callback=None):
-        self.__send_command("launcher_", "request", "ssap://com.webos.applicationManager/listLaunchPoints", None, callback)
-
-    def openAppWithPayload(self, payload, callback=None):
-        self.__send_command("", "request", "ssap://com.webos.applicationManager/launch", payload, callback)
-
-    def startApp(self, appid, callback=None):
-        self.__send_command("", "request", "ssap://system.launcher/launch", {'id': appid}, callback)
-
-    def closeApp(self, appid, callback=None):
-        self.__send_command("", "request", "ssap://system.launcher/close", {'id': appid}, callback)
-
-    def openYoutubeId(self, videoid, callback=None):
-        self.openYoutubeURL("http://www.youtube.com/tv?v=" + videoid, callback)
-
-    def openYoutubeURL(self, url, callback=None):
-        payload = {"id": "youtube.leanback.v4", "params": {"contentTarget": url}}
-        self.__send_command("", "request", "ssap://system.launcher/launch", payload, callback)
-
-    def __send_command(self, prefix, msgtype, uri, payload=None, callback=None):
-        if not callback:
-            callback = self.__defaultHandler
-        self.__waiting_callback = callback
-        message_data = {
-            'id': prefix + str(self.__command_count),
-            'type': msgtype,
-            'uri': uri
-        }
-        if type(payload) == dict:
-            payload = json.dumps(payload)
-        if type(payload) == str and len(payload) > 0:
-            message_data['payload'] = payload
-
-        self.send(json.dumps(message_data))
+if __name__ == '__main__':
+    main()

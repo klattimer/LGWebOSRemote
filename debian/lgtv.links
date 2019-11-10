@@ -1,0 +1,2 @@
+/opt/venvs/lgtv/bin/lgtv  /usr/bin/lgtv
+/opt/venvs/lgtv/config/config.json /etc/lgtv/config.json

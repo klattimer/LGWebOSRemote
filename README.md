@@ -8,6 +8,7 @@ Command line webOS remote for LGTVs. This tool uses a connection via websockets 
   * UF830V
   * UH650V
   * UJ635V
+  * UJ6570
   * UF776V
   * HU80KG.AEU (CineBeam 4K)
   * OLED55B7
@@ -42,6 +43,7 @@ All devices with firmware major version 4, product name "webOSTV 2.0"
     listServices          
     mute                  muted
     notification          message
+    nofificationWithIcon  message image_url
     off                   
     on                    
     openAppWithPayload    payload
@@ -66,20 +68,20 @@ Requires wakeonlan, websocket for python and arp (in Debian/Ubuntu: apt-get inst
 
 ## Example usage
     # Scan/Authenticate
-    $ lgtv scan 
+    $ lgtv scan
     {
-        "count": 1, 
+        "count": 1,
         "list": [
             {
-                "address": "192.168.1.31", 
-                "model": "UF830V", 
+                "address": "192.168.1.31",
+                "model": "UF830V",
                 "uuid": "10f34f86-0664-f223-4b8f-d16a772d9baf"
             }
-        ], 
+        ],
         "result": "ok"
     }
     $ lgtv auth 192.168.1.31
-    
+
     $ lgtv on
     $ lgtv off
 
