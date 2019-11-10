@@ -2,6 +2,7 @@ import socket
 import re
 from urllib.parse import unquote
 import json
+from time import sleep
 
 
 def LGTVScan():
@@ -41,6 +42,7 @@ def LGTVScan():
         else:
             print ('Unknown device')
             print (json.dumps(data))
+        sleep(2)
 
     sock.close()
     addresses = {x['address']: x for x in addresses}.values()
