@@ -1,0 +1,80 @@
+.\" Manpage for lgtv.
+.\" Contact karl@qdh.org.uk to correct errors or typos.
+.TH man 8 "27 October 2019" "0.1" "lgtv man page"
+.SH NAME
+pyods \- Control an LG webOS TV
+.SH SYNOPSIS
+lgtv
+.SH DESCRIPTION
+Control an LG webOS TV via the command line, works in linux, windows, macos
+
+.SH USAGE
+
+    lgtv scan
+    INSERT SCAN RESULTS
+
+    lgtv auth ip_address mytvname
+    INSERT AUTH RESPONSE
+
+    lgtv mytvname command options
+
+.SH COMMANDS
+    scan
+    auth
+    audioStatus
+    audioVolume
+    closeApp appid
+    getTVChannel
+    input3DOff
+    input3DOn
+    inputChannelDown
+    inputChannelUp
+    inputMediaFastForward
+    inputMediaPause
+    inputMediaPlay
+    inputMediaRewind
+    inputMediaStop
+    listApps
+    listChannels
+    listInputs
+    listServices
+    mute muted
+    notification message
+    nofificationWithIcon message image_url
+    off
+    on
+    openAppWithPayload payload
+    openBrowserAt url
+    openYoutubeId videoid
+    openYoutubeURL url
+    setInput input_id
+    setTVChannel channel
+    setVolume level
+    startApp appid
+    swInfo
+    volumeDown
+    volumeUp
+
+.SH EXAMPLE USAGE
+
+    lgtv off
+    lgtv on
+    lgtv openBrowserAt https://www.youtube.com/tv#/watch?v=dQw4w9WgXcQ
+
+.SH CONFIGURATION
+lgtv uses a config file located usually in /etc/lgtv/config.json or ~/.lgtv/config.json, the file format is JSON format,
+
+    Example:
+    {
+        "mylgtv" : {
+            "ip": "192.168.1.99"
+            "client-key": "",
+            "mac-address": "c8:08:ff:ff:ff:ff"
+        }
+    }
+
+
+.SH BUGS
+No known bugs.
+.SH AUTHOR
+Karl Lattimer (karl@qdh.org.uk)
