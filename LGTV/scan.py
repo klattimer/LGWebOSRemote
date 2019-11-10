@@ -4,7 +4,7 @@ from urllib.parse import unquote
 
 
 def LGTVScan():
-    request = 'M-SEARCH * HTTP/1.1\r\n' \
+    request = b'M-SEARCH * HTTP/1.1\r\n' \
               'HOST: 239.255.255.250:1900\r\n' \
               'MAN: "ssdp:discover"\r\n' \
               'MX: 2\r\n' \
@@ -16,7 +16,7 @@ def LGTVScan():
     addresses = []
     attempts = 4
     for i in range(attempts):
-        sock.sendto(request, ('239.255.255.250', 1900))
+        sock.sendto(request, (b'239.255.255.250', 1900))
         uuid = None
         model = None
         address = None
