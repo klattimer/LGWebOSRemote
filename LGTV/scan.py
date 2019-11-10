@@ -5,10 +5,10 @@ from urllib.parse import unquote
 
 def LGTVScan():
     request = b'M-SEARCH * HTTP/1.1\r\n' \
-              'HOST: 239.255.255.250:1900\r\n' \
-              'MAN: "ssdp:discover"\r\n' \
-              'MX: 2\r\n' \
-              'ST: urn:schemas-upnp-org:device:MediaRenderer:1\r\n\r\n'
+              b'HOST: 239.255.255.250:1900\r\n' \
+              b'MAN: "ssdp:discover"\r\n' \
+              b'MX: 2\r\n' \
+              b'ST: urn:schemas-upnp-org:device:MediaRenderer:1\r\n\r\n'
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.settimeout(1)
