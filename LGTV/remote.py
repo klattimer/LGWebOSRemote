@@ -82,7 +82,7 @@ class LGTVRemote(WebSocketClient):
         print (json.dumps({
             "closing": {
                 "code": code,
-                "reason": reason
+                "reason": reason.decode('utf-8')
             }
         }))
 
@@ -137,7 +137,8 @@ class LGTVRemote(WebSocketClient):
         }
         if type(payload) == dict:
             payload = json.dumps(payload)
-        elif type(payload) == str and len(payload) > 2:
+
+        if type(payload) == str and len(payload) > 2:
             message_data['payload'] = payload
 
         self.__command_count += 1
