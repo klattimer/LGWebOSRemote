@@ -25,7 +25,7 @@ def LGTVScan():
         response, address = sock.recvfrom(512)
         for line in response.split(b'\n'):
             if line.startswith(b'USN'):
-                uuid = re.findall(r'uuid:(.*?):', line)[0]
+                uuid = re.findall(r'uuid:(.*?):', line.decode('utf-8'))[0]
             if line.startswith(b'DLNADeviceName'):
                 (junk, data) = line.split(b':')
                 data = data.strip()
