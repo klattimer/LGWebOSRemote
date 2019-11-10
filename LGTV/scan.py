@@ -21,25 +21,20 @@ def LGTVScan():
         model = None
         address = None
         data = {}
-        try:
-            response, address = sock.recvfrom(512)
-            for line in response.split('\n'):
-                if line.startswith("USN"):
-                    uuid = re.findall(r'uuid:(.*?):', line)[0]
-                if line.startswith("DLNADeviceName"):
-                    (junk, data) = line.split(':')
-                    data = data.strip()
-                    data = unquote(data)
-                    model = re.findall(r'\[LG\] webOS TV (.*)', data)[0]
-                data = {
-                    'uuid': uuid,
-                    'model': model,
-                    'address': address[0]
-                }
-
-        except Exception as e:
-            print(e)
-            continue
+        response, address = sock.recvfrom(512)
+        for line in response.split('\n'):
+            if line.startswith("USN"):
+                uuid = re.findall(r'uuid:(.*?):', line)[0]
+            if line.startswith("DLNADeviceName"):
+                (junk, data) = line.split(':')
+                data = data.strip()
+                data = unquote(data)
+                model = re.findall(r'\[LG\] webOS TV (.*)', data)[0]
+            data = {
+                'uuid': uuid,
+                'model': model,
+                'address': address[0]
+            }
 
         if re.search('LG', response):
             addresses.append(data)
