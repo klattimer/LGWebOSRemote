@@ -45,5 +45,5 @@ def LGTVScan():
         sleep(2)
 
     sock.close()
-    addresses = {x['address']: x for x in addresses}.values()
-    return list(set(addresses))
+    addresses = list({x['address']: x for x in addresses}.values())
+    return addresses
