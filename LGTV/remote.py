@@ -36,7 +36,7 @@ class LGTVRemote(WebSocketClient):
     def __init__(self, name, ip=None, mac=None, key=None, hostname=None):
         self.__command_count = 0
         self.__waiting_callback = None
-        self.__commands = None
+        self.__commands = []
         self.__handshake_done = False
 
         self.__hostname = hostname
