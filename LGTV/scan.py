@@ -41,7 +41,7 @@ def LGTVScan():
             addresses.append(data)
         else:
             print ('Unknown device')
-            print (json.dumps(data))
+            print (response, address)
         sleep(2)
 
     sock.close()
