@@ -33,7 +33,7 @@ def LGTVScan():
             data = {
                 'uuid': uuid,
                 'model': model,
-                'address': address[0].decode('utf-8')
+                'address': address[0]
             }
 
         if re.search(b'LG', response):
