@@ -105,9 +105,10 @@ class LGTVRemote(WebSocketClient):
 
         while len(self.__commands) > 0:
             command = self.__commands.pop(0)
-            method = command.keys()[0]
+            method = list(command.keys())[0]
             args = command[method]
             self.__class__.__dict__[method](self, **args)
+        self.close()
 
     def __defaultHandler(self, response):
         # {"type":"response","id":"0","payload":{"returnValue":true}}
