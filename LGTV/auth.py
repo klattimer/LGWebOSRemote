@@ -67,7 +67,7 @@ class LGTVAuth(WebSocketClient):
         print (json.dumps({
             "closing": {
                 "code": code,
-                "reason": reason
+                "reason": reason.decode('utf-8')
             }
         }))
 
