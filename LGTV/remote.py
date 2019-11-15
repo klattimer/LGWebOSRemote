@@ -89,6 +89,8 @@ class LGTVRemote(WebSocketClient):
         }))
 
     def received_message(self, response):
+        logging.debug("Received response")
+        logging.debug(response)
         if self.__waiting_callback:
             self.__waiting_callback(json.loads(str(response)))
 
