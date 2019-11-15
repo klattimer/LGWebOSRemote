@@ -6,6 +6,7 @@ import requests
 import base64
 import json
 import os
+import logging
 
 from .payload import hello_data
 
@@ -74,6 +75,7 @@ class LGTVRemote(WebSocketClient):
         if self.__clientKey is None:
             raise Exception("Client is not authenticated")
 
+        logging.debug("Initiating handshake")
         hello_data['payload']['client-key'] = self.__clientKey
         self.__waiting_callback = self.__handshake
         self.send(json.dumps(hello_data))
@@ -90,12 +92,13 @@ class LGTVRemote(WebSocketClient):
         if self.__waiting_callback:
             self.__waiting_callback(json.loads(str(response)))
 
+
     #
     # Pragma Mark Internal command handling
     #
-
     def __handshake(self, response):
         if 'client-key' in response['payload'].keys():
+            logging.debug("Handshake complete")
             self.__handshake_done = True
             self.__execute()
 
@@ -111,6 +114,7 @@ class LGTVRemote(WebSocketClient):
         self.close()
 
     def __defaultHandler(self, response):
+        logging.debug(response)
         # {"type":"response","id":"0","payload":{"returnValue":true}}
         if response['type'] == "error":
             print (json.dumps(response))
@@ -142,6 +146,7 @@ class LGTVRemote(WebSocketClient):
             message_data['payload'] = payload
 
         self.__command_count += 1
+        logging.debug(message_data)
         self.send(json.dumps(message_data))
 
     #
@@ -218,6 +223,9 @@ class LGTVRemote(WebSocketClient):
 
     def listChannels(self, callback=None):
         self.__send_command("request", "ssap://tv/getChannelList", None, callback, "channels")
+
+    def getCursorSocket(self, callback=None):
+        self.__send_command("request", "ssap://com.webos.service.networkinput/getPointerInputSocket", None, callback)
 
     def input3DOn(self, callback=None):
         self.__send_command("request", "ssap://com.webos.service.tv.display/set3DOn", None, callback)

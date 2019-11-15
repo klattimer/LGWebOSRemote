@@ -5,6 +5,7 @@ import json
 import os
 import sys
 from time import sleep
+import logging
 
 from .scan import LGTVScan
 from .remote import LGTVRemote
@@ -92,6 +93,7 @@ def main():
     if len(sys.argv) < 2:
         usage("Too few arguments")
         sys.exit(1)
+    logging.basicConfig(level=logging.DEBUG)
 
     command = None
     filename = None
