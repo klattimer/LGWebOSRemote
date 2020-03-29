@@ -8,11 +8,13 @@ Command line webOS remote for LGTVs. This tool uses a connection via websockets 
   * UF830V
   * UH650V
   * UJ635V
+  * UJ6309
   * UJ6570
   * UF776V
   * HU80KG.AEU (CineBeam 4K)
   * OLED55B7
   * SK8500PLA
+  * SM9010PLA
   * [please add more!]
 
 Tested with python 2.7 on mac/linux and works fine, your mileage may vary with windows, patches welcome.
@@ -23,10 +25,10 @@ All devices with firmware major version 4, product name "webOSTV 2.0"
 
 ## Available Commands
     scan
-    auth                  Hostname/IP     Authenticate and exit, creates initial config ~/.lgtv.json
+    auth <Hostname/IP> <name>
     audioStatus           
     audioVolume           
-    closeApp              appid
+    closeApp <appid>
     getTVChannel          
     input3DOff            
     input3DOn             
@@ -41,19 +43,19 @@ All devices with firmware major version 4, product name "webOSTV 2.0"
     listChannels          
     listInputs            
     listServices          
-    mute                  muted
-    notification          message
-    nofificationWithIcon  message image_url
+    mute <muted>
+    notification <message>
+    nofificationWithIcon <message> <image_url>
     off                   
     on                    
-    openAppWithPayload    payload
-    openBrowserAt         url
-    openYoutubeId         videoid
-    openYoutubeURL        url
-    setInput              input_id
-    setTVChannel          channel
-    setVolume             level
-    startApp              appid
+    openAppWithPayload <payload>
+    openBrowserAt <url>
+    openYoutubeId <videoid>
+    openYoutubeURL <url>
+    setInput <input_id>
+    setTVChannel <channel>
+    setVolume <level>
+    startApp <appid>
     swInfo                
     volumeDown            
     volumeUp
@@ -80,16 +82,20 @@ Requires wakeonlan, websocket for python and arp (in Debian/Ubuntu: apt-get inst
         ],
         "result": "ok"
     }
-    $ lgtv auth 192.168.1.31
+    $ lgtv auth 192.168.1.31 MyTV
+    # At this point the TV will request pairing, follow the instructions on screen
 
-    $ lgtv on
-    $ lgtv off
+    # Commands are basically
+    #$ lgtv TVNAME COMMAND COMMAND ARGS
+
+    $ lgtv MyTV on
+    $ lgtv MyTV off
 
     # If you have the youtube plugin
-    $ lgtv openYoutubeURL https://www.youtube.com/watch?v=dQw4w9WgXcQ
+    $ lgtv MyTV openYoutubeURL https://www.youtube.com/watch?v=dQw4w9WgXcQ
 
     # Otherwise, this works reasonably well
-    $ lgtv openBrowserAt https://www.youtube.com/tv#/watch?v=dQw4w9WgXcQ
+    $ lgtv MyTV openBrowserAt https://www.youtube.com/tv#/watch?v=dQw4w9WgXcQ
 
 ## Caveats
 
