@@ -112,6 +112,10 @@ class LGTVRemote(WebSocketClient):
             method = list(command.keys())[0]
             args = command[method]
             self.__class__.__dict__[method](self, **args)
+        self.__waitClose()
+
+    def __waitClose(self):
+        self._th.join(timeout=1)
         self.close()
 
     def __defaultHandler(self, response):
