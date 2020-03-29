@@ -149,6 +149,7 @@ def main():
         name = sys.argv[1]
         ws = LGTVRemote(name, **config[name])
         ws.on()
+        sleep(1)
         sys.exit(0)
     else:
         try:

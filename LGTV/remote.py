@@ -94,7 +94,6 @@ class LGTVRemote(WebSocketClient):
         if self.__waiting_callback:
             self.__waiting_callback(json.loads(str(response)))
 
-
     #
     # Pragma Mark Internal command handling
     #
