@@ -30,16 +30,16 @@ def usage(error=None):
     print ("  -i                    interactive mode")
 
     print ("  scan")
-    print ("  auth <host>")
+    print ("  auth <host> <tv_name>")
 
     commands = LGTVRemote.getCommands()
     for c in commands:
         args = getargspec(LGTVRemote.__dict__[c])
         if len(args.args) > 1:
             a = ' <' + '> <'.join(args.args[1:-1]) + '>'
-            print ('  ' + c + a)
+            print ('  <tv_name> ' + c + a)
         else:
-            print ('  ' + c)
+            print ('  <tv_name> ' + c)
 
 
 def parseargs(command, argv):
