@@ -80,11 +80,11 @@ class LGTVRemote(WebSocketClient):
         self.__waiting_callback = self.__handshake
         self.send(json.dumps(hello_data))
 
-    def closed(self, code, reason=None):
+    def closed(self, code, reason: str = None):
         print (json.dumps({
             "closing": {
                 "code": code,
-                "reason": reason.decode('utf-8')
+                "reason": reason
             }
         }))
 
