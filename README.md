@@ -28,28 +28,28 @@ All devices with firmware major version 4, product name "webOSTV 2.0"
 ## Available Commands
     scan
     auth <Hostname/IP> <name>
-    audioStatus           
-    audioVolume           
+    audioStatus
+    audioVolume
     closeApp <appid>
-    getTVChannel          
-    input3DOff            
-    input3DOn             
-    inputChannelDown      
-    inputChannelUp        
-    inputMediaFastForward  
-    inputMediaPause       
-    inputMediaPlay        
-    inputMediaRewind      
-    inputMediaStop        
-    listApps              
-    listChannels          
-    listInputs            
-    listServices          
+    getTVChannel
+    input3DOff
+    input3DOn
+    inputChannelDown
+    inputChannelUp
+    inputMediaFastForward
+    inputMediaPause
+    inputMediaPlay
+    inputMediaRewind
+    inputMediaStop
+    listApps
+    listChannels
+    listInputs
+    listServices
     mute <muted>
     notification <message>
     nofificationWithIcon <message> <image_url>
-    off                   
-    on                    
+    off
+    on
     openAppWithPayload <payload>
     openBrowserAt <url>
     openYoutubeId <videoid>
@@ -58,13 +58,13 @@ All devices with firmware major version 4, product name "webOSTV 2.0"
     setTVChannel <channel>
     setVolume <level>
     startApp <appid>
-    swInfo                
-    volumeDown            
+    swInfo
+    volumeDown
     volumeUp
 
 ## Install
 
-Requires wakeonlan, websocket for python and arp (in Debian/Ubuntu: apt-get install net-tools)
+Requires wakeonlan, websocket for python and iproute2
 
     python -m venv lgtv-venv
     source lgtv-venv/bin/activate

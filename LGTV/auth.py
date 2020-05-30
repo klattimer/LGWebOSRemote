@@ -48,7 +48,7 @@ class LGTVAuth(WebSocketClient):
             return
 
     def __get_mac_address(self, address):
-        pid = subprocess.Popen(["arp", "-n", address], stdout=subprocess.PIPE)
+        pid = subprocess.Popen(["ip", "n", "s", address], stdout=subprocess.PIPE)
         s = pid.communicate()[0]
         s = s.decode("utf-8")
         matches = re.search(r"(([a-f\d]{1,2}\:){5}[a-f\d]{1,2})", s)
