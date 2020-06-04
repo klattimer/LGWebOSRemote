@@ -12,7 +12,7 @@ def LGTVScan():
               b'ST: urn:schemas-upnp-org:device:MediaRenderer:1\r\n\r\n'
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.settimeout(1)
+    sock.settimeout(10)
 
     addresses = []
     attempts = 4
