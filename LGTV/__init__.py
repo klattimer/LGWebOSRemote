@@ -145,7 +145,7 @@ def main():
             print ("Wrote config file: " + filename)
 
         sys.exit(0)
-    elif sys.argv[2] == "on":
+    elif len(sys.argv) >= 2 and sys.argv[2] == "on":
         name = sys.argv[1]
         ws = LGTVRemote(name, **config[name])
         ws.on()
@@ -157,7 +157,7 @@ def main():
             name = sys.argv[1]
             command = sys.argv[2]
         except Exception as e:
-            usage(e.message)
+            usage(str(e))
             sys.exit(1)
 
     try:
