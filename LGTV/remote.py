@@ -81,6 +81,8 @@ class LGTVRemote(WebSocketClient):
         self.send(json.dumps(hello_data))
 
     def closed(self, code, reason: str = ''):
+        if type(reason) == bytes:
+            reason = reason.decode('utf-8')
         print (json.dumps({
             "closing": {
                 "code": code,
