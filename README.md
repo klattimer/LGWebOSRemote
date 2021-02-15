@@ -17,6 +17,8 @@ Command line webOS remote for LGTVs. This tool uses a connection via websockets 
   * SM9010PLA
   * OLED65B9PUA
   * OLED55C9
+  * OLED55CXAUA
+  * 43LM6300PSB
   * [please add more!]
 
 Tested with python 2.7 on mac/linux and works fine, your mileage may vary with windows, patches welcome.
