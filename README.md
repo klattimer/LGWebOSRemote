@@ -5,73 +5,94 @@ Command line webOS remote for LGTVs. This tool uses a connection via websockets 
 
 ### Tested with
 
-  * UF830V
-  * UH650V
-  * UJ635V
-  * UJ6309
-  * UJ6570
-  * UF776V
+  * 43LM6300PSB
+  * 43UN73003LC
   * HU80KG.AEU (CineBeam 4K)
   * OLED55B7
+  * OLED55C9
+  * OLED55CX5LB
+  * OLED55CXAUA
+  * OLED65B9PUA
   * SK8500PLA
   * SM9010PLA
-  * OLED65B9PUA
-  * OLED55C9
-  * OLED55CXAUA
-  * OLED55CX5LB
-  * 43LM6300PSB
+  * UF776V
+  * UF830V
+  * UH650V
+  * UJ6309
+  * UJ635V
+  * UJ6570
   * [please add more!]
 
 Tested with python 2.7 on mac/linux and works fine, your mileage may vary with windows, patches welcome.
+Tested with python 3.9 on Debian Unstable.
 
 ### Likely supports
 
 All devices with firmware major version 4, product name "webOSTV 2.0"
 
 ## Available Commands
-    scan
-    auth <Hostname/IP> <name>
-    audioStatus
-    audioVolume
-    closeApp <appid>
-    getTVChannel
-    input3DOff
-    input3DOn
-    inputChannelDown
-    inputChannelUp
-    inputMediaFastForward
-    inputMediaPause
-    inputMediaPlay
-    inputMediaRewind
-    inputMediaStop
-    listApps
-    listChannels
-    listInputs
-    listServices
-    mute <muted>
-    notification <message>
-    nofificationWithIcon <message> <image_url>
-    off
-    on
-    openAppWithPayload <payload>
-    openBrowserAt <url>
-    openYoutubeId <videoid>
-    openYoutubeURL <url>
-    setInput <input_id>
-    setTVChannel <channel>
-    setVolume <level>
-    startApp <appid>
-    swInfo
-    volumeDown
-    volumeUp
+	lgtv scan
+	lgtv auth <host> MyTV
+	lgtv MyTV audioStatus
+	lgtv MyTV audioVolume
+	lgtv MyTV closeApp <appid>
+	lgtv MyTV execute <command>
+	lgtv MyTV getCursorSocket
+	lgtv MyTV getForegroundAppInfo
+	lgtv MyTV getPowerState
+	lgtv MyTV getSoundOutput
+	lgtv MyTV getSystemInfo
+	lgtv MyTV getTVChannel
+	lgtv MyTV input3DOff
+	lgtv MyTV input3DOn
+	lgtv MyTV inputChannelDown
+	lgtv MyTV inputChannelUp
+	lgtv MyTV inputMediaFastForward
+	lgtv MyTV inputMediaPause
+	lgtv MyTV inputMediaPlay
+	lgtv MyTV inputMediaRewind
+	lgtv MyTV inputMediaStop
+	lgtv MyTV listApps
+	lgtv MyTV listLaunchPoints
+	lgtv MyTV listChannels
+	lgtv MyTV listInputs
+	lgtv MyTV listServices
+	lgtv MyTV mute <true|false>
+	lgtv MyTV notification <message>
+	lgtv MyTV notificationWithIcon <message> <url>
+	lgtv MyTV off
+	lgtv MyTV on
+	lgtv MyTV openAppWithPayload <payload>
+	lgtv MyTV openBrowserAt <url>
+	lgtv MyTV openYoutubeId <videoid>
+	lgtv MyTV openYoutubeURL <url>
+	lgtv MyTV serialise
+	lgtv MyTV setInput <input_id>
+	lgtv MyTV setSoundOutput <tv_speaker|external_optical|external_arc|external_speaker|lineout|headphone|tv_external_speaker|tv_speaker_headphone|bt_soundbar>
+	lgtv MyTV screenOff
+	lgtv MyTV screenOn
+	lgtv MyTV setTVChannel <channelId>
+	lgtv MyTV setVolume <level>
+	lgtv MyTV startApp <appid>
+	lgtv MyTV swInfo
+	lgtv MyTV volumeDown
+	lgtv MyTV volumeUp
 
 ## Install
 
-Requires wakeonlan, websocket for python and iproute2
+Requires wakeonlan, websocket for python (python3-websocket for python3), and iproute2.
+python-pip (python3-pip for python3) and git are required for the installation process.
 
     python -m venv lgtv-venv
     source lgtv-venv/bin/activate
     pip install git+https://github.com/klattimer/LGWebOSRemote
+
+To install it system wide:
+
+	sudo mkdir -p /opt
+	sudo python -m venv /opt/lgtv-venv
+	source /opt/lgtv-venv/bin/activate
+	sudo pip install git+https://github.com/klattimer/LGWebOSRemote
 
 ## Example usage
     # Scan/Authenticate
@@ -105,6 +126,15 @@ Requires wakeonlan, websocket for python and iproute2
 ## Caveats
 
 You need to auth with the TV before being able to use the on command as it requires the mac address.
+
+## TODO
+
+Implement the following features:
+
+	closeToast
+	createAlert
+	closeAlert
+	getSystemSettings
 
 ## Bugs
 
