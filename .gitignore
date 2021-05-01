@@ -2,3 +2,4 @@
 venv/
 *.egg-info
 __pycache__/
+/.pybuild/
