@@ -1,6 +1,6 @@
 Source: lgtv
 Section: python
-Priority: extra
+Priority: optional
 Maintainer: Karl Lattimer <karl@qdh.org.uk>
 Build-Depends: debhelper-compat (= 13), python3, dh-virtualenv (>= 1.0),
     python3-setuptools, python3-pip, python3-dev, libffi-dev
