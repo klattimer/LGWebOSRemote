@@ -2,6 +2,7 @@ lgtv (0.2-2) UNRELEASED; urgency=medium
 
   * Mark debian/rules as executable.
   * Upgrade to newer source format 3.0 (quilt).
+  * Bump debhelper from deprecated 9 to 13.
 
  -- Barak A. Pearlmutter <bap@debian.org>  Sat, 01 May 2021 19:38:19 -0000
 
