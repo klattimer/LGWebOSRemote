@@ -28,7 +28,7 @@ hello_data = {
                 "READ_TV_CHANNEL_LIST",
                 "WRITE_NOTIFICATION_TOAST",
                 "READ_POWER_STATE",
-                "READ_COUNTRY_INFO"
+                "READ_COUNTRY_INFO",
                 "READ_SETTINGS",
                 "CONTROL_TV_SCREEN",
                 "CONTROL_TV_STANBY",

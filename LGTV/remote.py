@@ -298,3 +298,6 @@ class LGTVRemote(WebSocketClient):
 
     def screenOn(self):
         self.__send_command("request", "ssap://com.webos.service.tvpower/power/turnOnScreen", {"standbyMode": "active"})
+
+    def getPictureSettings(self, keys=["contrast", "backlight", "brightness", "color"]):
+        self.__send_command("request", "ssap://settings/getSystemSettings", {"category": "picture", "keys": keys})
