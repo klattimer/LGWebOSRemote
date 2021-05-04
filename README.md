@@ -39,6 +39,7 @@ All devices with firmware major version 4, product name "webOSTV 2.0"
 	lgtv MyTV execute <command>
 	lgtv MyTV getCursorSocket
 	lgtv MyTV getForegroundAppInfo
+	lgtv MyTV getPictureSettings
 	lgtv MyTV getPowerState
 	lgtv MyTV getSoundOutput
 	lgtv MyTV getSystemInfo
