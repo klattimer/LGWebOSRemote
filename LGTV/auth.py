@@ -1,4 +1,5 @@
 from ws4py.client.threadedclient import WebSocketClient
+from getmac import get_mac_address
 import subprocess
 import socket
 import re
@@ -48,16 +49,7 @@ class LGTVAuth(WebSocketClient):
             return
 
     def __get_mac_address(self, address):
-        pid = subprocess.Popen(["ip", "n", "s", address], stdout=subprocess.PIPE)
-        s = pid.communicate()[0]
-        s = s.decode("utf-8")
-        matches = re.search(r"(([a-f\d]{1,2}\:){5}[a-f\d]{1,2})", s)
-        if not matches:
-            return None
-        mac = matches.groups()[0]
-        m = mac.split(':')
-        mac = ':'.join(['%02x' % int(x, 16) for x in m])
-        return mac
+        return get_mac_address(ip=address)
 
     def received_message(self, response):
         if self.__waiting_callback:
