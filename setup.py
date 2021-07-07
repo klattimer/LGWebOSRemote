@@ -1,7 +1,7 @@
 from setuptools import setup
 
 
-LGTV_VERSION = '0.2'
+LGTV_VERSION = '0.3'
 LGTV_DOWNLOAD_URL = (
     'https://github.com/klattimer/LGWebOSRemote/tarball/' + LGTV_VERSION
 )
@@ -28,7 +28,8 @@ setup(
     install_requires=[
         'wakeonlan',
         'ws4py',
-        'requests'
+        'requests',
+        'getmac',
     ],
     data_files=[
         ('config', ['data/config.json'])
