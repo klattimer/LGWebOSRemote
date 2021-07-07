@@ -81,7 +81,7 @@ All devices with firmware major version 4, product name "webOSTV 2.0"
 
 ## Install
 
-Requires wakeonlan, websocket for python (python3-websocket for python3), and iproute2.
+Requires wakeonlan, websocket for python (python3-websocket for python3), and getmac.
 python-pip (python3-pip for python3) and git are required for the installation process.
 
     python -m venv lgtv-venv
