@@ -5,6 +5,7 @@ lgtv (0.2-2) UNRELEASED; urgency=medium
   * Bump debhelper from deprecated 9 to 13.
   * Set debhelper-compat version in Build-Depends.
   * Change priority extra to priority optional.
+  * Set upstream metadata fields: Bug-Database, Bug-Submit, Name.
 
  -- Barak A. Pearlmutter <bap@debian.org>  Sat, 01 May 2021 19:38:19 -0000
 
