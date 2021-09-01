@@ -29,6 +29,7 @@ def LGTVScan():
                     uuid = re.findall(r'uuid:(.*?):', line.decode('utf-8'))[0]
                 except:
                     data['usn'] = line.strip().decode('utf-8')
+                    continue
             if line.startswith(b'DLNADeviceName'):
                 (junk, data) = line.split(b':')
                 data = data.strip().decode('utf-8')
