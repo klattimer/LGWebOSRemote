@@ -65,10 +65,8 @@ class LGTVAuth(WebSocketClient):
 
     def serialise(self):
         return {
-            self.__name: {
-                "key": self.__clientKey,
-                "mac": self.__macAddress,
-                "ip": self.__ip,
-                "hostname": self.__hostname
-            }
+            "key": self.__clientKey,
+            "mac": self.__macAddress,
+            "ip": self.__ip,
+            "hostname": self.__hostname
         }
