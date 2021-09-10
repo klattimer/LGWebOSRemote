@@ -138,7 +138,7 @@ def main():
         ws.connect()
         ws.run_forever()
         sleep(1)
-        config = ws.serialise()
+        config[name] = ws.serialise()
         if filename is not None:
             with open(filename, 'w') as f:
                 f.write(json.dumps(config))
