@@ -19,7 +19,7 @@ def LGTVScan():
     for i in range(attempts):
         sock.sendto(request, (b'239.255.255.250', 1900))
         uuid = None
-        model = None
+        tv_name = None
         address = None
         data = {}
         response, address = sock.recvfrom(512)
@@ -30,13 +30,13 @@ def LGTVScan():
                 except:
                     data['usn'] = line.strip().decode('utf-8')
                     continue
-            if line.startswith(b'DLNADeviceName'):
-                (junk, data) = line.split(b':')
-                data = data.strip().decode('utf-8')
-                model = re.findall(r'\[LG\] webOS TV (.*)', unquote(data))[0]
+            if line.startswith(b'DLNADeviceName.lge.com'):
+                tv_name = unquote(
+                    line.split(b':')[1].strip().decode('utf-8')
+                )
         data = {
             'uuid': uuid,
-            'model': model,
+            'tv_name': tv_name,
             'address': address[0]
         }
 
