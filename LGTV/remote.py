@@ -1,5 +1,6 @@
 from ws4py.client.threadedclient import WebSocketClient
 from types import FunctionType
+from urllib.parse import parse_qs, urlparse
 from wakeonlan import send_magic_packet
 import socket
 import requests
@@ -156,6 +157,22 @@ class LGTVRemote(WebSocketClient):
         logging.debug(message_data)
         self.send(json.dumps(message_data))
 
+    def __get_youtube_id_from_url(self, url_string):
+        if url_string.startswith(("youtu", "www")):
+            url_string = "http://" + url_string
+        url = urlparse(url_string)
+
+        if url.hostname and url.path:
+            if "youtube" in url.hostname:
+                if url.path == "/watch":
+                    return parse_qs(url.query)["v"][0]
+                elif url.path.startswith(("/embed/", "/v/")):
+                    return url.path.split("/")[2]
+            elif "youtu.be" in url.hostname:
+                return url.path[1:]
+        # No ID found
+        return None
+
     #
     # Pragma Mark Supported commands
     #
@@ -274,6 +291,19 @@ class LGTVRemote(WebSocketClient):
     def openYoutubeURL(self, url, callback=None):
         payload = {"id": "youtube.leanback.v4", "params": {"contentTarget": url}}
         self.__send_command("request", "ssap://system.launcher/launch", payload, callback)
+
+    def openYoutubeLegacyId(self, videoid, callback=None):
+        payload = {"id": "youtube.leanback.v4", "contentId": videoid}
+        self.__send_command("request", "ssap://system.launcher/launch", payload, callback)
+
+    def openYoutubeLegacyURL(self, url, callback=None):
+        videoid = self.__get_youtube_id_from_url(url)
+        if videoid:
+            self.openYoutubeLegacyId(videoid, callback)
+        else:
+            logging.debug("Invalid Youtube video URL: " + url)
+            print("Invalid Youtube video URL")
+            self.close()
 
     def getForegroundAppInfo(self, callback=None):
         self.__send_command("request", "ssap://com.webos.applicationManager/getForegroundAppInfo", None, callback)

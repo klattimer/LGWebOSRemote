@@ -69,6 +69,8 @@ All devices with firmware major version 4, product name "webOSTV 2.0"
 	lgtv MyTV openBrowserAt <url>
 	lgtv MyTV openYoutubeId <videoid>
 	lgtv MyTV openYoutubeURL <url>
+	lgtv MyTV openYoutubeLegacyId <videoid>
+	lgtv MyTV openYoutubeLegacyURL <url>
 	lgtv MyTV serialise
 	lgtv MyTV setInput <input_id>
 	lgtv MyTV setSoundOutput <tv_speaker|external_optical|external_arc|external_speaker|lineout|headphone|tv_external_speaker|tv_speaker_headphone|bt_soundbar>
