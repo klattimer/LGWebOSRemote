@@ -24,6 +24,7 @@ Command line webOS remote for LGTVs. This tool uses a connection via websockets 
   * UJ6570
   * UJ701V
   * 60UJ6300-UA
+  * 65UQ70
   * [please add more!]
 
 Tested with python 2.7 on mac/linux and works fine, your mileage may vary with windows, patches welcome.
