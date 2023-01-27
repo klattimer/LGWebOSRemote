@@ -9,7 +9,7 @@ from .payload import hello_data
 
 
 class LGTVAuth(WebSocketClient):
-    def __init__(self, name, host):
+    def __init__(self, name, host, ssl=False):
         self.__clientKey = None
         self.__macAddress = None
         self.__name = name
@@ -27,8 +27,10 @@ class LGTVAuth(WebSocketClient):
 
         if self.__macAddress is None and self.__ip is not None:
             self.__macAddress = self.__get_mac_address(self.__ip)
-
-        super(LGTVAuth, self).__init__('ws://' + self.__ip + ':3000/', exclude_headers=["Origin"])
+        if ssl==False:
+            super(LGTVAuth, self).__init__('ws://' + self.__ip + ':3000/', exclude_headers=["Origin"])
+        else:
+            super(LGTVAuth, self).__init__('wss://' + self.__ip + ':3001/', exclude_headers=["Origin"])
         self.__waiting_callback = self.__prompt
 
     def opened(self):

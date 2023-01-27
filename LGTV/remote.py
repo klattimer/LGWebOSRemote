@@ -51,7 +51,10 @@ class LGTVRemote(WebSocketClient):
             # Over ride IP address when we know the hostname
             self.__ip = socket.gethostbyname(self.__hostname)
 
-        super(LGTVRemote, self).__init__('ws://' + self.__ip + ':3000/', exclude_headers=["Origin"])
+        if ssl==False:
+            super(LGTVRemote, self).__init__('ws://' + self.__ip + ':3000/', exclude_headers=["Origin"])
+        else:
+            super(LGTVRemote, self).__init__('wss://' + self.__ip + ':3001/', exclude_headers=["Origin"])
 
     def execute(self, command, args):
         self.__commands.append({command: args})

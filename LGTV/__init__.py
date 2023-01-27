@@ -134,7 +134,7 @@ def main():
             sys.exit(1)
         name = sys.argv[3]
         host = sys.argv[2]
-        ws = LGTVAuth(name, host)
+        ws = LGTVAuth(name, host, ssl=len(sys.argv)>=5 and sys.argv[4]=="ssl")
         ws.connect()
         ws.run_forever()
         sleep(1)
@@ -153,7 +153,7 @@ def main():
         sys.exit(0)
     else:
         try:
-            args = parseargs(sys.argv[2], sys.argv[3:])
+            args = parseargs(sys.argv[2], sys.argv[4:])
             name = sys.argv[1]
             command = sys.argv[2]
         except Exception as e:
@@ -161,7 +161,7 @@ def main():
             sys.exit(1)
 
     try:
-        ws = LGTVRemote(name, **config[name])
+        ws = LGTVRemote(name, **config[name], ssl=len(sys.argv)>=4 and sys.argv[3]=="ssl")
         ws.connect()
         if command is not None:
             ws.execute(command, args)

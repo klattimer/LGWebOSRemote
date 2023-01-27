@@ -24,10 +24,12 @@ Command line webOS remote for LGTVs. This tool uses a connection via websockets 
   * UJ6570
   * UJ701V
   * 60UJ6300-UA
+  * OLED42C2 (ssl)
   * [please add more!]
 
 Tested with python 2.7 on mac/linux and works fine, your mileage may vary with windows, patches welcome.
 Tested with python 3.9 on Debian Unstable.
+Tested with python 3.10 on Windows 10/11
 
 ### Likely supports
 
@@ -128,6 +130,14 @@ To install it system wide:
 
     # Otherwise, this works reasonably well
     $ lgtv MyTV openBrowserAt https://www.youtube.com/tv#/watch?v=dQw4w9WgXcQ
+
+## SSL
+
+Starting 25th of January 2023 LG has deprecated insecure ws connections, ssl is now required. Because of this, should you wish to use it on newer firmware devices you can append the argument "ssl" at the back. It connects to 3001 with wss.
+	# Example
+	$ lgtv auth 192.168.1.31 MyTV ssl
+	$ lgtv MyTV on ssl
+	$ lgtv MyTV off ssl
 
 ## Caveats
 
