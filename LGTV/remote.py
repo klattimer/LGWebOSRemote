@@ -35,7 +35,7 @@ class LGTVRemote(WebSocketClient):
         out.sort()
         return out
 
-    def __init__(self, name, ip=None, mac=None, key=None, hostname=None):
+    def __init__(self, name, ip=None, mac=None, key=None, hostname=None, ssl=False):
         self.__command_count = 0
         self.__waiting_callback = None
         self.__commands = []
