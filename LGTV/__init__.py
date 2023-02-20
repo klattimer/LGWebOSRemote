@@ -165,7 +165,7 @@ def main():
         sys.exit(0)
     else:
         try:
-            args = parseargs(sys.argv[2], sys.argv[4:])
+            args = parseargs(sys.argv[2], sys.argv[3:])
             name = sys.argv[1]
             command = sys.argv[2]
         except Exception as e:
