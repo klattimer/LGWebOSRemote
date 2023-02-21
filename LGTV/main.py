@@ -2,7 +2,12 @@ from __future__ import print_function
 import sys
 import os
 import json
-from inspect import getargspec
+import platform
+isPython311AndAbove = (int(platform.python_version_tuple()[0]) == 3 and int(platform.python_version_tuple()[1]) >= 11) or int(platform.python_version_tuple()[0]) > 3
+if isPython311AndAbove:
+    from inspect import getfullargspec
+else:
+    from inspect import getargspec
 from LGTV import LGTVScan, LGTVClient, getCommands
 
 
@@ -20,12 +25,18 @@ def usage(error=None):
     for c in getCommands(LGTVClient):
         print ("  " + c, end=" ")
         print (" " * (20 - len(c)), end=" ")
-        args = getargspec(LGTVClient.__dict__[c])
+        if isPython311AndAbove:
+            args = getfullargspec(LGTVClient.__dict__[c])
+        else:
+            args = getargspec(LGTVClient.__dict__[c])
         print (' '.join(args.args[1:-1]))
 
 
 def parseargs(command, argv):
-    args = getargspec(LGTVClient.__dict__[command])
+    if isPython311AndAbove:
+        args = getfullargspec(LGTVClient.__dict__[command])
+    else:
+        args = getargspec(LGTVClient.__dict__[command])
     args = args.args[1:-1]
 
     if len(args) != len(argv):

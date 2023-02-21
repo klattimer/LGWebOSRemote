@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
-from inspect import getargspec
+import platform
+isPython311AndAbove = (int(platform.python_version_tuple()[0]) == 3 and int(platform.python_version_tuple()[1]) >= 11) or int(platform.python_version_tuple()[0]) > 3
+if isPython311AndAbove:
+    from inspect import getfullargspec
+else:
+    from inspect import getargspec
+
 import json
 import os
 import sys
@@ -34,7 +40,10 @@ def usage(error=None):
 
     commands = LGTVRemote.getCommands()
     for c in commands:
-        args = getargspec(LGTVRemote.__dict__[c])
+        if isPython311AndAbove:
+            args = getfullargspec(LGTVRemote.__dict__[c])
+        else:
+            args = getargspec(LGTVRemote.__dict__[c])
         if len(args.args) > 1:
             a = ' <' + '> <'.join(args.args[1:-1]) + '>'
             print ('  <tv_name> ' + c + a)
@@ -43,7 +52,10 @@ def usage(error=None):
 
 
 def parseargs(command, argv):
-    args = getargspec(LGTVRemote.__dict__[command])
+    if isPython311AndAbove:
+        args = getfullargspec(LGTVRemote.__dict__[command])
+    else:
+        args = getargspec(LGTVRemote.__dict__[command])
     args = args.args[1:-1]
 
     if len(args) != len(argv):
@@ -153,7 +165,7 @@ def main():
         sys.exit(0)
     else:
         try:
-            args = parseargs(sys.argv[2], sys.argv[4:])
+            args = parseargs(sys.argv[2], sys.argv[3:])
             name = sys.argv[1]
             command = sys.argv[2]
         except Exception as e:
