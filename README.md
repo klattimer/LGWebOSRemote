@@ -133,11 +133,13 @@ To install it system wide:
 
 ## SSL
 
-Starting 25th of January 2023 LG has deprecated insecure ws connections, ssl is now required. Because of this, should you wish to use it on newer firmware devices you can append the argument "ssl" at the back. It connects to 3001 with wss.
-	# Example
-	$ lgtv auth 192.168.1.31 MyTV ssl
-	$ lgtv MyTV on ssl
-	$ lgtv MyTV off ssl
+Starting 25th of January 2023 LG has deprecated insecure ws connections, ssl is now required. Because of this, should you wish to use it on newer firmware devices you can append the argument "ssl" at the back. It connects to 3001 with wss. 
+### Example
+```
+$ lgtv auth 192.168.1.31 MyTV ssl 
+$ lgtv MyTV off ssl
+$ lgtv MyTV screenOff ssl
+```
 
 ## Caveats
 
