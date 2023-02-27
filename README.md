@@ -152,8 +152,6 @@ You need to auth with the TV before being able to use the on command as it requi
 Implement the following features:
 
 	closeToast
-	createAlert
-	closeAlert
 	getSystemSettings
 
 ## Bugs
