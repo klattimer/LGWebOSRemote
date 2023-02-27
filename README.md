@@ -40,7 +40,9 @@ All devices with firmware major version 4, product name "webOSTV 2.0"
 	lgtv auth <host> MyTV
 	lgtv MyTV audioStatus
 	lgtv MyTV audioVolume
+	lgtv MyTV closeAlert <alertId>
 	lgtv MyTV closeApp <appid>
+	lgtv MyTV createAlert <message> <button>
 	lgtv MyTV execute <command>
 	lgtv MyTV getCursorSocket
 	lgtv MyTV getForegroundAppInfo
