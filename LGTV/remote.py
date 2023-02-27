@@ -192,6 +192,12 @@ class LGTVRemote(WebSocketClient):
 
     def notification(self, message, callback=None):
         self.__send_command("request", "ssap://system.notifications/createToast", {"message": message}, callback)
+	
+    def createAlert(self, message, button, callback=None):
+        self.__send_command("request", "ssap://system.notifications/createAlert", {"message": message, "buttons": [{"label": button}]}, callback)
+
+    def closeAlert(self, alertId, callback=None):
+        self.__send_command("request", "ssap://system.notifications/closeAlert", {'alertId': alertId}, callback)
 
 	# not working, why?
     #def notificationClose(self, toastId, callback=None):
