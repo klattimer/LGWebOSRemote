@@ -93,7 +93,8 @@ def find_config():
 
 def main():
     parser = argparse.ArgumentParser(
-        'lgtv', 
+        'lgtv',
+        description = '''LGTV Controller\nAuthor: Karl Lattimer <karl@qdh.org.uk>''',
         epilog = get_commands(), 
         formatter_class = argparse.RawDescriptionHelpFormatter
     )
