@@ -12,6 +12,7 @@ import os
 import sys
 from time import sleep
 import logging
+import argparse
 
 from .scan import LGTVScan
 from .remote import LGTVRemote
@@ -24,31 +25,20 @@ search_config = [
     "/opt/venvs/lgtv/config/config.json"
 ]
 
-
-def usage(error=None):
-    if error:
-        print ("Error: " + error)
-    print ("LGTV Controller")
-    print ("Author: Karl Lattimer <karl@qdh.org.uk>")
-    print ("Usage: lgtv <command> [parameter]\n")
-    print ("Available Commands:")
-
-    print ("  -i                    interactive mode")
-
-    print ("  scan")
-    print ("  auth <host> <tv_name>")
-
+def get_commands():
+    text = 'commands\n'
     commands = LGTVRemote.getCommands()
     for c in commands:
         if isPython311AndAbove:
             args = getfullargspec(LGTVRemote.__dict__[c])
         else:
             args = getargspec(LGTVRemote.__dict__[c])
-        if len(args.args) > 1:
+        line = ' ' + c
+        if len(args.args) > 2:
             a = ' <' + '> <'.join(args.args[1:-1]) + '>'
-            print ('  <tv_name> ' + c + a)
-        else:
-            print ('  <tv_name> ' + c)
+            line += a
+        text += line + '\n'
+    return text
 
 
 def parseargs(command, argv):
@@ -102,13 +92,20 @@ def find_config():
 
 
 def main():
-    if len(sys.argv) < 2:
-        usage("Too few arguments")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(
+        'lgtv',
+        description = '''LGTV Controller\nAuthor: Karl Lattimer <karl@qdh.org.uk>''',
+        epilog = get_commands(), 
+        formatter_class = argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument('--name', '-n', default=None)
+    parser.add_argument('command')
+    parser.add_argument('args', nargs='*')
+    parser.add_argument('--ssl', action='store_true')
+    args = parser.parse_args()
+
     logging.basicConfig(level=logging.DEBUG)
 
-    command = None
-    filename = None
     config = {}
 
     filename = find_config()
@@ -118,68 +115,58 @@ def main():
                 config = json.loads(f.read())
         except:
             pass
-
-    if sys.argv[1] == "scan":
-        results = LGTVScan()
-        if len(results) > 0:
-            print (json.dumps({
-                "result": "ok",
-                "count": len(results),
-                "list": results
-            }))
-            sys.exit(0)
-        else:
-            print (json.dumps({
-                "result": "failed",
-                "count": len(results)
-            }))
-            sys.exit(1)
-
-    if sys.argv[1] == "-i":
-        pass
-    elif sys.argv[1] == "auth":
-        if len(sys.argv) < 3:
-            usage("Hostname or IP is required for auth")
-            sys.exit(1)
-        if len(sys.argv) < 4:
-            usage("TV name is required for auth")
-            sys.exit(1)
-        name = sys.argv[3]
-        host = sys.argv[2]
-        ws = LGTVAuth(name, host, ssl=len(sys.argv)>=5 and sys.argv[4]=="ssl")
-        ws.connect()
-        ws.run_forever()
-        sleep(1)
-        config[name] = ws.serialise()
-        if filename is not None:
-            with open(filename, 'w') as f:
-                f.write(json.dumps(config))
-            print ("Wrote config file: " + filename)
-
-        sys.exit(0)
-    elif len(sys.argv) >= 2 and sys.argv[2] == "on":
-        name = sys.argv[1]
-        ws = LGTVRemote(name, **config[name])
-        ws.on()
-        sleep(1)
-        sys.exit(0)
-    else:
+    
+    if args.name:
         try:
-            args = parseargs(sys.argv[2], sys.argv[4:])
-            name = sys.argv[1]
-            command = sys.argv[2]
+            kwargs = parseargs(args.command, args.args)
         except Exception as e:
-            usage(str(e))
+            parser.print_help()
             sys.exit(1)
+        
+        try:
+            ws = LGTVRemote(args.name, **config[args.name], ssl=args.ssl)
+            ws.connect()
+            ws.execute(args.command, kwargs)
+            ws.run_forever()
+        except KeyboardInterrupt:
+            ws.close()
+    else:
+        if args.command == "scan":
+            results = LGTVScan()
+            if len(results) > 0:
+                print (json.dumps({
+                    "result": "ok",
+                    "count": len(results),
+                    "list": results
+                }))
+                sys.exit(0)
+            else:
+                print (json.dumps({
+                    "result": "failed",
+                    "count": len(results)
+                }))
+                sys.exit(1)
 
-    try:
-        ws = LGTVRemote(name, **config[name], ssl=len(sys.argv)>=4 and sys.argv[3]=="ssl")
-        ws.connect()
-        if command is not None:
-            ws.execute(command, args)
-        ws.run_forever()
-    except KeyboardInterrupt:
-        ws.close()
+        elif args.command == "i":
+            print('Interactiv mode not implemented')
+
+        elif args.command == "auth":
+            if len(args.args) != 2:
+                print('lgtv auth <host> <tv_name>')
+                sys.exit(1)
+            host, name = args.args
+            print(host, name)
+            ws = LGTVAuth(name, host, ssl=args.ssl)
+            ws.connect()
+            ws.run_forever()
+            sleep(1)
+            config[name] = ws.serialise()
+            if filename is not None:
+                with open(filename, 'w') as f:
+                    f.write(json.dumps(config))
+                print ("Wrote config file: " + filename)
+            sys.exit(0)
+
 
 if __name__ == '__main__':
     main()
