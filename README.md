@@ -43,6 +43,7 @@ All devices with firmware major version 4, product name "webOSTV 2.0"
 ## Available Commands
 	lgtv scan
 	lgtv --ssl auth <host> MyTV
+	lgtv setDefault MyTV
 	lgtv --name MyTV --ssl audioStatus
 	lgtv --name MyTV --ssl audioVolume
 	lgtv --name MyTV --ssl closeAlert <alertId>
@@ -127,7 +128,7 @@ To install it system wide:
     # At this point the TV will request pairing, follow the instructions on screen
 
     # Commands are basically
-    #$ lgtv --name TVNAME --ssl COMMAND COMMAND_ARGS
+    $ lgtv --name TVNAME --ssl COMMAND COMMAND_ARGS
 
     $ lgtv --name MyTV --ssl on
     $ lgtv --name MyTV --ssl off
@@ -138,9 +139,13 @@ To install it system wide:
     # Otherwise, this works reasonably well
     $ lgtv --name MyTV --ssl openBrowserAt https://www.youtube.com/tv#/watch?v=dQw4w9WgXcQ
 
+    # You can set the default TV so the `--name` argument can be skipped
+    $ lgtv setDefault MyTV
+
 ## SSL
 
 Starting 25th of January 2023 LG has deprecated insecure ws connections, ssl is now required. Because of this, should you wish to use it on newer firmware devices you can append the argument "ssl" at the back. It connects to 3001 with wss. 
+
 ### Example
 ```
 $ lgtv auth 192.168.1.31 MyTV
