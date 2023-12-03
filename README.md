@@ -42,7 +42,7 @@ All devices with firmware major version 4, product name "webOSTV 2.0"
 
 ## Available Commands
 	lgtv scan
-	lgtv auth <host> MyTV
+	lgtv --ssl auth <host> MyTV
 	lgtv --name MyTV --ssl audioStatus
 	lgtv --name MyTV --ssl audioVolume
 	lgtv --name MyTV --ssl closeAlert <alertId>
@@ -123,7 +123,7 @@ To install it system wide:
         ],
         "result": "ok"
     }
-    $ lgtv auth 192.168.1.31 MyTV
+    $ lgtv --ssl auth 192.168.1.31 MyTV
     # At this point the TV will request pairing, follow the instructions on screen
 
     # Commands are basically
