@@ -115,8 +115,42 @@ def main():
                 config = json.loads(f.read())
         except:
             pass
-    
-    if args.name:
+
+    if args.command == "scan":
+        results = LGTVScan()
+        if len(results) > 0:
+            print (json.dumps({
+                "result": "ok",
+                "count": len(results),
+                "list": results
+            }))
+            sys.exit(0)
+        else:
+            print (json.dumps({
+                "result": "failed",
+                "count": len(results)
+            }))
+            sys.exit(1)
+
+    elif args.command == "auth":
+        if len(args.args) != 2:
+            print('lgtv auth <host> <tv_name>')
+            sys.exit(1)
+        host, name = args.args
+        print(host, name)
+        ws = LGTVAuth(name, host, ssl=args.ssl)
+        ws.connect()
+        ws.run_forever()
+        sleep(1)
+        config[name] = ws.serialise()
+        if filename is not None:
+            with open(filename, 'w') as f:
+                f.write(json.dumps(config))
+            print ("Wrote config file: " + filename)
+        sys.exit(0)
+
+    # These commands require a TV name and config
+    else:
         try:
             kwargs = parseargs(args.command, args.args)
         except Exception as e:
@@ -130,39 +164,6 @@ def main():
             ws.run_forever()
         except KeyboardInterrupt:
             ws.close()
-    else:
-        if args.command == "scan":
-            results = LGTVScan()
-            if len(results) > 0:
-                print (json.dumps({
-                    "result": "ok",
-                    "count": len(results),
-                    "list": results
-                }))
-                sys.exit(0)
-            else:
-                print (json.dumps({
-                    "result": "failed",
-                    "count": len(results)
-                }))
-                sys.exit(1)
-
-        elif args.command == "auth":
-            if len(args.args) != 2:
-                print('lgtv auth <host> <tv_name>')
-                sys.exit(1)
-            host, name = args.args
-            print(host, name)
-            ws = LGTVAuth(name, host, ssl=args.ssl)
-            ws.connect()
-            ws.run_forever()
-            sleep(1)
-            config[name] = ws.serialise()
-            if filename is not None:
-                with open(filename, 'w') as f:
-                    f.write(json.dumps(config))
-                print ("Wrote config file: " + filename)
-            sys.exit(0)
 
 
 if __name__ == '__main__':
