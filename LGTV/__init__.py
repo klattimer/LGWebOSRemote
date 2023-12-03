@@ -91,6 +91,11 @@ def find_config():
     return w
 
 
+def write_config(filename, config):
+    with open(filename, 'w') as f:
+        f.write(json.dumps(config))
+
+
 def main():
     parser = argparse.ArgumentParser(
         'lgtv',
@@ -143,10 +148,21 @@ def main():
         sleep(1)
         config[name] = ws.serialise()
         if filename is not None:
-            with open(filename, 'w') as f:
-                f.write(json.dumps(config))
+            write_config(filename, config)
             print ("Wrote config file: " + filename)
         sys.exit(0)
+
+    elif args.command == "setDefault":
+        name = args.args[0]
+        if filename is None:
+            print("No config file found")
+            sys.exit(1)
+        if name not in config:
+            print("TV not found in config")
+            sys.exit(1)
+        config["_default"] = name
+        write_config(filename, config)
+        print ("Wrote default to config file: " + filename)
 
     # These commands require a TV name and config
     else:
