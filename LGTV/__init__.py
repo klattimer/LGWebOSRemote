@@ -147,9 +147,6 @@ def main():
                 }))
                 sys.exit(1)
 
-        elif args.command == "i":
-            print('Interactiv mode not implemented')
-
         elif args.command == "auth":
             if len(args.args) != 2:
                 print('lgtv auth <host> <tv_name>')
