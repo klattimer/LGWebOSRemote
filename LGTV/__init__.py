@@ -166,6 +166,9 @@ def main():
                     f.write(json.dumps(config))
                 print ("Wrote config file: " + filename)
             sys.exit(0)
+        else:
+            print("No TV selected or unknown command entered. Perhaps you are missing the -n/--name argument?")
+            sys.exit(1)
 
 
 if __name__ == '__main__':
