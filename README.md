@@ -112,6 +112,10 @@ To install it system wide:
 	source /opt/lgtv-venv/bin/activate
 	sudo pip install git+https://github.com/klattimer/LGWebOSRemote
 
+or with [pipx](https://pipx.pypa.io/stable/):
+
+	pipx install git+https://github.com/klattimer/LGWebOSRemote.git
+
 ## Example usage
     # Scan/Authenticate
     $ lgtv scan
