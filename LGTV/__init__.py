@@ -137,7 +137,6 @@ def main():
             print('lgtv auth <host> <tv_name>')
             sys.exit(1)
         host, name = args.args
-        print(host, name)
         ws = LGTVAuth(name, host, ssl=args.ssl)
         ws.connect()
         ws.run_forever()
