@@ -155,9 +155,17 @@ def main():
         except Exception as e:
             parser.print_help()
             sys.exit(1)
-        
+
+        if args.name:
+            name = args.name
+        elif "_default" in config:
+            name = config["_default"]
+        else:
+            print("A TV name is required. Set one with -n/--name or the setDefault command.")
+            sys.exit(1)
+
         try:
-            ws = LGTVRemote(args.name, **config[args.name], ssl=args.ssl)
+            ws = LGTVRemote(name, **config[name], ssl=args.ssl)
             ws.connect()
             ws.execute(args.command, kwargs)
             ws.run_forever()
