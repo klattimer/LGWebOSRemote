@@ -264,6 +264,9 @@ class LGTVRemote(WebSocketClient):
     def getCursorSocket(self, callback=None):
         self.__send_command("request", "ssap://com.webos.service.networkinput/getPointerInputSocket", None, callback)
 
+    def sendEnterKey(self, callback=None):
+        self.__send_command("request", "ssap://com.webos.service.ime/sendEnterKey", None, callback)
+	    
     def input3DOn(self, callback=None):
         self.__send_command("request", "ssap://com.webos.service.tv.display/set3DOn", None, callback)
 
