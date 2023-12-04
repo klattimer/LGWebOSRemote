@@ -33,6 +33,6 @@ class LGTVCursor(WebSocketClient):
     def back(self):
         self.send("type:button\nname:BACK\n\n")
 
-    def enter(self)
+    def enter(self):
         self.remote.sendEnterKey()
     
