@@ -216,6 +216,9 @@ class LGTVRemote(WebSocketClient):
     def mute(self, muted, callback=None):
         self.__send_command("request", "ssap://audio/setMute", {"mute": muted}, callback)
 
+    def setSoundOutput(self, output, callback=None):
+        self.__send_command("request", "ssap://audio/setSoundOutput", {"output": output}, callback)
+	    
     def audioStatus(self, callback=None):
         self.__send_command("request", "ssap://audio/getStatus", None, callback, "status")
 
