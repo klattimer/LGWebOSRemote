@@ -91,6 +91,11 @@ def find_config():
     return w
 
 
+def write_config(filename, config):
+    with open(filename, 'w') as f:
+        f.write(json.dumps(config))
+
+
 def main():
     parser = argparse.ArgumentParser(
         'lgtv',
@@ -115,57 +120,73 @@ def main():
                 config = json.loads(f.read())
         except:
             pass
-    
-    if args.name:
+
+    if args.command == "scan":
+        results = LGTVScan()
+        if len(results) > 0:
+            print (json.dumps({
+                "result": "ok",
+                "count": len(results),
+                "list": results
+            }))
+            sys.exit(0)
+        else:
+            print (json.dumps({
+                "result": "failed",
+                "count": len(results)
+            }))
+            sys.exit(1)
+
+    elif args.command == "auth":
+        if len(args.args) != 2:
+            print('lgtv auth <host> <tv_name>')
+            sys.exit(1)
+        host, name = args.args
+        ws = LGTVAuth(name, host, ssl=args.ssl)
+        ws.connect()
+        ws.run_forever()
+        sleep(1)
+        config[name] = ws.serialise()
+        if filename is not None:
+            write_config(filename, config)
+            print ("Wrote config file: " + filename)
+        sys.exit(0)
+
+    elif args.command == "setDefault":
+        name = args.args[0]
+        if filename is None:
+            print("No config file found")
+            sys.exit(1)
+        if name not in config:
+            print("TV not found in config")
+            sys.exit(1)
+        config["_default"] = name
+        write_config(filename, config)
+        print ("Wrote default to config file: " + filename)
+
+    # These commands require a TV name and config
+    else:
         try:
             kwargs = parseargs(args.command, args.args)
         except Exception as e:
             parser.print_help()
             sys.exit(1)
-        
+
+        if args.name:
+            name = args.name
+        elif "_default" in config:
+            name = config["_default"]
+        else:
+            print("A TV name is required. Set one with -n/--name or the setDefault command.")
+            sys.exit(1)
+
         try:
-            ws = LGTVRemote(args.name, **config[args.name], ssl=args.ssl)
+            ws = LGTVRemote(name, **config[name], ssl=args.ssl)
             ws.connect()
             ws.execute(args.command, kwargs)
             ws.run_forever()
         except KeyboardInterrupt:
             ws.close()
-    else:
-        if args.command == "scan":
-            results = LGTVScan()
-            if len(results) > 0:
-                print (json.dumps({
-                    "result": "ok",
-                    "count": len(results),
-                    "list": results
-                }))
-                sys.exit(0)
-            else:
-                print (json.dumps({
-                    "result": "failed",
-                    "count": len(results)
-                }))
-                sys.exit(1)
-
-        elif args.command == "i":
-            print('Interactiv mode not implemented')
-
-        elif args.command == "auth":
-            if len(args.args) != 2:
-                print('lgtv auth <host> <tv_name>')
-                sys.exit(1)
-            host, name = args.args
-            print(host, name)
-            ws = LGTVAuth(name, host, ssl=args.ssl)
-            ws.connect()
-            ws.run_forever()
-            sleep(1)
-            config[name] = ws.serialise()
-            if filename is not None:
-                with open(filename, 'w') as f:
-                    f.write(json.dumps(config))
-                print ("Wrote config file: " + filename)
-            sys.exit(0)
 
 
 if __name__ == '__main__':
