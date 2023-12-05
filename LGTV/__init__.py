@@ -182,6 +182,12 @@ def main():
 
         try:
             ws = LGTVRemote(name, **config[name], ssl=args.ssl)
+
+            if args.command == "on":
+                # "on" is special, it doesn't use a websocket connection
+                ws.on()
+                return
+
             ws.connect()
             ws.execute(args.command, kwargs)
             ws.run_forever()
