@@ -1,11 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
-import platform
-isPython311AndAbove = (int(platform.python_version_tuple()[0]) == 3 and int(platform.python_version_tuple()[1]) >= 11) or int(platform.python_version_tuple()[0]) > 3
-if isPython311AndAbove:
-    from inspect import getfullargspec
-else:
-    from inspect import getargspec
+from inspect import getfullargspec
 
 import json
 import os
@@ -29,10 +24,7 @@ def get_commands():
     text = 'commands\n'
     commands = LGTVRemote.getCommands()
     for c in commands:
-        if isPython311AndAbove:
-            args = getfullargspec(LGTVRemote.__dict__[c])
-        else:
-            args = getargspec(LGTVRemote.__dict__[c])
+        args = getfullargspec(LGTVRemote.__dict__[c])
         line = ' ' + c
         if len(args.args) > 2:
             a = ' <' + '> <'.join(args.args[1:-1]) + '>'
@@ -42,10 +34,7 @@ def get_commands():
 
 
 def parseargs(command, argv):
-    if isPython311AndAbove:
-        args = getfullargspec(LGTVRemote.__dict__[command])
-    else:
-        args = getargspec(LGTVRemote.__dict__[command])
+    args = getfullargspec(LGTVRemote.__dict__[command])
     args = args.args[1:-1]
 
     if len(args) != len(argv):
