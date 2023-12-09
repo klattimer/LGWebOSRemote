@@ -107,9 +107,10 @@ def main():
     parser.add_argument('command')
     parser.add_argument('args', nargs='*')
     parser.add_argument('--ssl', action='store_true')
+    parser.add_argument('--debug', '-d', action='store_true', help='enable debug output')
     args = parser.parse_args()
 
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO)
 
     config = {}
 
