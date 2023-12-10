@@ -83,6 +83,7 @@ All devices with firmware major version 4, product name "webOSTV 2.0"
 	lgtv --name MyTV --ssl openYoutubeURL <url>
 	lgtv --name MyTV --ssl openYoutubeLegacyId <videoid>
 	lgtv --name MyTV --ssl openYoutubeLegacyURL <url>
+	lgtv --name MyTV --ssl sendButton <button>
 	lgtv --name MyTV --ssl serialise
 	lgtv --name MyTV --ssl setInput <input_id>
 	lgtv --name MyTV --ssl setSoundOutput <tv_speaker|external_optical|external_arc|external_speaker|lineout|headphone|tv_external_speaker|tv_speaker_headphone|bt_soundbar>
