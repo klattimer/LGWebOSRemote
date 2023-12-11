@@ -12,6 +12,7 @@ import argparse
 from .scan import LGTVScan
 from .remote import LGTVRemote
 from .auth import LGTVAuth
+from .cursor import LGTVCursor
 
 
 search_config = [
@@ -158,9 +159,10 @@ def main():
     else:
         try:
             kwargs = parseargs(args.command, args.args)
-        except Exception as e:
-            parser.print_help()
-            sys.exit(1)
+        except Exception:
+            if args.command not in {"sendButton"}:
+                parser.print_help()
+                sys.exit(1)
 
         if args.name:
             name = args.name
@@ -169,6 +171,12 @@ def main():
         else:
             print("A TV name is required. Set one with -n/--name or the setDefault command.")
             sys.exit(1)
+
+        if args.command == "sendButton":
+            cursor = LGTVCursor(name, **config[name], ssl=args.ssl)
+            cursor.connect()
+            cursor.execute(args.args)
+            return
 
         try:
             ws = LGTVRemote(name, **config[name], ssl=args.ssl)
