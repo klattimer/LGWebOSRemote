@@ -172,6 +172,10 @@ def main():
             print("A TV name is required. Set one with -n/--name or the setDefault command.")
             sys.exit(1)
 
+        if name not in config:
+            print(f"No entry with the name '{name}' was found in the configuration at {filename}.")
+            sys.exit(1)
+
         if args.command == "sendButton":
             cursor = LGTVCursor(name, **config[name], ssl=args.ssl)
             cursor.connect()
