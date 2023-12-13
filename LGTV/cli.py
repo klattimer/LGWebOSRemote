@@ -9,6 +9,7 @@ import click
 from LGTV.auth import LGTVAuth
 from LGTV.conf import read_config, write_config
 from LGTV.cursor import LGTVCursor
+from LGTV.remote import LGTVRemote
 from LGTV.scan import LGTVScan
 
 
@@ -106,6 +107,14 @@ def send_button(ctx: click.Context, buttons: Tuple[str], ssl: bool = False) -> N
     cursor = LGTVCursor(ctx.obj["tv_name"], **ctx.obj["tv_config"], ssl=ssl)
     cursor.connect()
     cursor.execute(buttons)
+
+
+@cli.command
+@click.pass_context
+def on(ctx: click.Context) -> None:
+    """Turn on TV using Wake-on-LAN."""
+    remote = LGTVRemote(ctx.obj["tv_name"], **ctx.obj["tv_config"])
+    remote.on()
 
 
 if __name__ == "__main__":
