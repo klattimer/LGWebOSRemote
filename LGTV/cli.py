@@ -2,13 +2,14 @@ import json
 import logging
 import sys
 from time import sleep
-from typing import Optional
+from typing import Optional, Tuple
 
 import click
 
-from LGTV.conf import read_config, write_config
-from LGTV.scan import LGTVScan
 from LGTV.auth import LGTVAuth
+from LGTV.conf import read_config, write_config
+from LGTV.cursor import LGTVCursor
+from LGTV.scan import LGTVScan
 
 
 @click.group
@@ -94,6 +95,17 @@ def set_default(ctx: click.Context, name: str) -> None:
     config["_default"] = name
     write_config(ctx.obj["config_path"], config)
     click.echo(f"Default TV set to '{name}'")
+
+
+@cli.command
+@click.argument("buttons", nargs=-1)
+@click.option("-s", "--ssl", is_flag=True, help="Connect to TV using SSL.")
+@click.pass_context
+def send_button(ctx: click.Context, buttons: Tuple[str], ssl: bool = False) -> None:
+    """Sends button presses from the remote."""
+    cursor = LGTVCursor(ctx.obj["tv_name"], **ctx.obj["tv_config"], ssl=ssl)
+    cursor.connect()
+    cursor.execute(buttons)
 
 
 if __name__ == "__main__":
