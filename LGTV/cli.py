@@ -2,7 +2,7 @@ import json
 import logging
 import sys
 from time import sleep
-from typing import Optional, Tuple
+from typing import Dict, Optional, Tuple
 
 import click
 
@@ -64,8 +64,8 @@ def scan() -> None:
 @click.argument("host")
 @click.argument("name")
 @click.option("-s", "--ssl", is_flag=True, help="Connect to TV using SSL.")
-@click.pass_context
-def auth(ctx: click.Context, host: str, name: str, ssl: bool = False) -> None:
+@click.pass_obj
+def auth(obj: Dict, host: str, name: str, ssl: bool = False) -> None:
     """Connect to a new TV."""
     if name.startswith("_"):
         click.secho(
@@ -77,43 +77,43 @@ def auth(ctx: click.Context, host: str, name: str, ssl: bool = False) -> None:
     ws.connect()
     ws.run_forever()
     sleep(1)
-    config = ctx.obj["full_config"]
+    config = obj["full_config"]
     config[name] = ws.serialise()
-    write_config(ctx.obj["config_path"], config)
-    click.echo(f"Wrote config file: {ctx.obj['config_path']}")
+    write_config(obj["config_path"], config)
+    click.echo(f"Wrote config file: {obj['config_path']}")
 
 
 @cli.command
 @click.argument("name")
-@click.pass_context
-def set_default(ctx: click.Context, name: str) -> None:
+@click.pass_obj
+def set_default(obj: Dict, name: str) -> None:
     """Change the default TV to interact with."""
-    config = ctx.obj["full_config"]
+    config = obj["full_config"]
     if name == "_default" or name not in config:
         click.secho("TV not found in config", fg="red", err=True)
         sys.exit(1)
 
     config["_default"] = name
-    write_config(ctx.obj["config_path"], config)
+    write_config(obj["config_path"], config)
     click.echo(f"Default TV set to '{name}'")
 
 
 @cli.command
 @click.argument("buttons", nargs=-1)
 @click.option("-s", "--ssl", is_flag=True, help="Connect to TV using SSL.")
-@click.pass_context
-def send_button(ctx: click.Context, buttons: Tuple[str], ssl: bool = False) -> None:
+@click.pass_obj
+def send_button(obj: Dict, buttons: Tuple[str], ssl: bool = False) -> None:
     """Sends button presses from the remote."""
-    cursor = LGTVCursor(ctx.obj["tv_name"], **ctx.obj["tv_config"], ssl=ssl)
+    cursor = LGTVCursor(obj["tv_name"], **obj["tv_config"], ssl=ssl)
     cursor.connect()
     cursor.execute(buttons)
 
 
 @cli.command
-@click.pass_context
-def on(ctx: click.Context) -> None:
+@click.pass_obj
+def on(obj: Dict) -> None:
     """Turn on TV using Wake-on-LAN."""
-    remote = LGTVRemote(ctx.obj["tv_name"], **ctx.obj["tv_config"])
+    remote = LGTVRemote(obj["tv_name"], **obj["tv_config"])
     remote.on()
 
 
