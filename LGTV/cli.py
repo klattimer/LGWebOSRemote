@@ -8,7 +8,7 @@ from LGTV import cli_static
 from LGTV.conf import read_config
 
 
-class CLI(click.MultiCommand):
+class CLI(click.Group):
     def list_commands(self, ctx: click.Context) -> List[str]:
         commands = []
 
@@ -19,9 +19,7 @@ class CLI(click.MultiCommand):
 
     def get_command(self, ctx: click.Context, cmd_name: str) -> Optional[click.Command]:
         fun_name = cmd_name.replace("-", "_")
-
-        if fun_name in cli_static.__all__:
-            return getattr(cli_static, fun_name)
+        return getattr(cli_static, fun_name, None)
 
 
 @click.group(cls=CLI)
