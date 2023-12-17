@@ -30,6 +30,7 @@ setup(
         'ws4py',
         'requests',
         'getmac',
+        'click>=8.1.0',
     ],
     data_files=[
         ('config', ['data/config.json'])
