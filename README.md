@@ -7,6 +7,7 @@ Command line webOS remote for LGTVs. This tool uses a connection via websockets 
 
   * 43LM6300PSB
   * 43UN73003LC
+  * 43UJ630V-ZA
   * 60UJ6300-UA
   * HU80KG.AEU (CineBeam 4K)
   * OLED48A2
