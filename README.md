@@ -1,6 +1,13 @@
 # LGWebOSRemote
 Command line webOS remote for LGTVs. This tool uses a connection via websockets to port 3000 on newer LG TVs, there are other tools which use a restful connection to port 8080 however that port is closed on newer firmware versions.
 
+## A note from the developer
+
+My LG TV is now so out of date that largely what is developed here is tested, improved and debugged by the community. As it goes my TV works fine and I'm not the kind of person to create more unnecessary electrical waste than I need to so as long as my current TV works, it's largely down to you guys.
+
+A big thanks for the contributions over the years too, lots of people have made lots of changes to this project over time, and it would only be as useful as it is with their help.
+
+
 ## Supported models
 
 ### Tested with
