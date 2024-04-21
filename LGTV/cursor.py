@@ -79,3 +79,45 @@ class LGTVCursor(WebSocketClient):
 
     def exit(self):
         self.send("type:button\nname:EXIT\n\n")
+
+    def red(self):
+        self.send("type:button\nname:RED\n\n")
+
+    def green(self):
+        self.send("type:button\nname:GREEN\n\n")
+
+    def yellow(self):
+        self.send("type:button\nname:YELLOW\n\n")
+
+    def blue(self):
+        self.send("type:button\nname:BLUE\n\n")
+
+    def channel_up(self):
+        self.send("type:button\nname:CHANNELUP\n\n")
+
+    def channel_down(self):
+        self.send("type:button\nname:CHANNELDOWN\n\n")
+
+    def volume_up(self):
+        self.send("type:button\nname:VOLUMEUP\n\n")
+
+    def volume_down(self):
+        self.send("type:button\nname:VOLUMEDOWN\n\n")
+
+    def play(self):
+        self.send("type:button\nname:PLAY\n\n")
+
+    def pause(self):
+        self.send("type:button\nname:PAUSE\n\n")
+
+    def stop(self):
+        self.send("type:button\nname:STOP\n\n")
+
+    def rewind(self):
+        self.send("type:button\nname:REWIND\n\n")
+
+    def fast_forward(self):
+        self.send("type:button\nname:FASTFORWARD\n\n")
+
+    def asterisk(self):
+        self.send("type:button\nname:ASTERISK\n\n")
