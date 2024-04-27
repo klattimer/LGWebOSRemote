@@ -8,7 +8,6 @@ import sys
 from time import sleep
 import logging
 import argparse
-
 from .scan import LGTVScan
 from .remote import LGTVRemote
 from .auth import LGTVAuth
@@ -48,8 +47,9 @@ def parseargs(command, argv):
         elif argv[i].lower() == "false":
             argv[i] = False
         try:
-            f = int(argv[i])
-            argv[i] = f
+            if command != "setTVChannel":
+                f = int(argv[i])
+                argv[i] = f
         except:
             try:
                 f = float(argv[i])
