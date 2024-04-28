@@ -1,0 +1,263 @@
+while [ true ]
+do
+
+  clear
+
+  echo "  ###############################################"
+  echo " ### LG REMOTE CONTROL #########################"
+  echo "###############################################"
+  echo "###"
+  echo "### 8 inputChannelUp    #   a - 30-2 TBD          #  A -         #  , - TUBI "
+  echo "### 7 inputChannelDown  #   b - 30-3 nest         #  B - BACK    #  / - PLUTO "
+  echo "### 9 volumeUp          #   c - 30-4 crime        #  C -         #  ? - SS "
+  echo "### 6 volumeDown        #   d -  5-1              #  D -         #  \' -  "
+  echo "### 0 mute true         #   e -  5-2              #  E - EXIT    #  \" - AMAZON"
+  echo "### . mute false        #   f -  456 WPT          #  F - FORWARD #  [ - VOICE"
+  echo "### 1 setVolume 10      #   g -  507 Com Cent     #  G -         #  ] - STORE DEMO"
+  echo "### 2 setVolume 20      #   h -  513 J Carson     #  H - LEFT    #  - - PARAMOUNT+"
+  echo "### 3 setVolume 30      #   i -  508 3's Company  #  I - ENTER   #  _ - "
+  echo "### 4 setVolume 40      #   j -  519 Love Boat    #  J - DOWN    #  + - "
+  echo "### 5 setVolume 50      #   k -  706 Homes        #  K - UP      #  = - "
+  echo "### v setVolume 15      #   l -  858 Pool         #  L - RIGHT   #  ( - "
+  echo "### ! screenOn          #   m -  915 Karaoke      #  M -         #  ) - "
+  echo "### @ screenOff         #   n -                   #  N -         #  * - "
+  echo "###                     #   o -                   #  O -         #  & - "
+  echo "###                     #   p -                   #  P -         #  ^ - "
+  echo "###                     #   q -                   #  Q -         #  % - "
+  echo "###                     #   r -                   #  R - REWIND  #  $ - "
+  echo "### { play              #   s -                   #  S - STOP    #  - "
+  echo "### } pause             #   t -                   #  T -         #  < - "
+  echo "###                     #   u -                   #  U -         #  > - "
+  echo "### \` power on          #   v -                   #  V -         #  - "
+  echo "### ~ power off         #   w -                   #  W -         #  - "
+  echo "### : lgtv scan         #   x -                   #  X -         #  - "
+  echo "### ; lgtv aut          #   y -                   #  Y -         #  - "
+  echo "### T QUIT              #   z -                   #  Z -         #  - "
+  echo "###" 
+  echo "#######################################################"
+  read -n1 -p " ### INPUT: " choice
+  echo $choice >> 1
+
+case $choice in
+
+
+    'R')    # 
+       lgtv --name MyTV --ssl sendButton rewind > /dev/null
+    ;;
+
+    'F')    # 
+       lgtv --name MyTV --ssl sendButton fast_forward > /dev/null
+    ;;
+
+    'E')    # 
+       lgtv --name MyTV --ssl sendButton exit > /dev/null
+    ;;
+
+    'H')    # 
+       lgtv --name MyTV --ssl sendButton left > /dev/null
+    ;;
+
+    'I')    # 
+       lgtv --name MyTV --ssl sendButton enter > /dev/null
+    ;;
+
+    'J')    # 
+       lgtv --name MyTV --ssl sendButton down > /dev/null
+    ;;
+
+    'K')    # 
+       lgtv --name MyTV --ssl sendButton up > /dev/null
+    ;;
+
+    'L')    # 
+       lgtv --name MyTV --ssl sendButton right > /dev/null
+    ;;
+
+    'K')    # 
+       lgtv --name MyTV --ssl sendButton up > /dev/null
+    ;;
+
+    '8')    # 
+       lgtv --name MyTV --ssl inputChannelUp > /dev/null
+    ;;
+
+    '7')    # 
+       lgtv --name MyTV --ssl inputChannelDown > /dev/null
+    ;;
+
+    '9')    # 
+       lgtv --name MyTV --ssl volumeUp  > /dev/null
+    ;;
+
+    '6')    # 
+       lgtv --name MyTV --ssl volumeDown  > /dev/null
+    ;;
+
+    '3')    # 
+       lgtv --name MyTV --ssl setVolume 30 > /dev/null
+    ;;
+
+    '2')    # 
+       lgtv --name MyTV --ssl setVolume 20 > /dev/null
+    ;;
+
+    '1')    # 
+       lgtv --name MyTV --ssl setVolume 10 > /dev/null
+    ;;
+
+    'v')    # 
+       lgtv --name MyTV --ssl setVolume 15 > /dev/null
+    ;;
+
+    '4')    # 
+       lgtv --name MyTV --ssl setVolume 40 > /dev/null
+    ;;
+    '5')    # 
+       lgtv --name MyTV --ssl setVolume 50 > /dev/null
+    ;;
+
+    '!')    # 
+       lgtv --name MyTV --ssl screenOn  > /dev/null
+    ;;
+
+    '@')    # 
+       lgtv --name MyTV --ssl screenOff  > /dev/null
+    ;;
+
+    '0')    # 
+       lgtv --name MyTV --ssl mute true  > /dev/null
+    ;;
+
+    '.')    # 
+       lgtv --name MyTV --ssl mute false  > /dev/null
+    ;;
+
+    '~')    # 
+       lgtv --name MyTV --ssl off  > /dev/null
+    ;;
+
+    '`')    # 
+       lgtv --name MyTV --ssl on  > /dev/null
+    ;;
+
+    '}')    # 
+       lgtv --name MyTV --ssl inputMediaPause > /dev/null
+    ;;
+
+    '{')    # 
+       lgtv --name MyTV --ssl inputMediaPlay > /dev/null
+    ;;
+
+    'c')    # 
+       lgtv --name MyTV --ssl setTVChannel 1_31_30_4_0_0_0 > /dev/null
+    ;;
+
+    'b')    # 
+       lgtv --name MyTV --ssl setTVChannel 1_31_30_3_0_0_0 > /dev/null
+    ;;
+
+    'a')    # 
+       lgtv --name MyTV --ssl setTVChannel 1_31_30_2_0_0_0 > /dev/null
+    ;;
+
+    'm')    # 
+       lgtv --name MyTV --ssl setTVChannel 11_3_915_65535_0_0_0 > /dev/null
+    ;;
+
+    'd')    # 
+       lgtv --name MyTV --ssl setTVChannel 1_35_5_1_0_0_0 > /dev/null
+    ;;
+
+    'e')    # 
+       lgtv --name MyTV --ssl setTVChannel 1_35_5_2_0_0_0 > /dev/null
+    ;;
+
+    'l')    # 
+       lgtv --name MyTV --ssl setTVChannel 11_3_858_65535_0_0_0 > /dev/null
+    ;;
+
+    'k')    # 
+       lgtv --name MyTV --ssl setTVChannel 11_3_706_65535_0_0_0 > /dev/null
+    ;;
+
+    'g')    # 
+       lgtv --name MyTV --ssl setTVChannel 11_3_507_65535_0_0_0 > /dev/null
+    ;;
+
+    'i')    # 
+       lgtv --name MyTV --ssl setTVChannel 11_3_508_65535_0_0_0 > /dev/null
+    ;;
+
+    'h')    # 
+       lgtv --name MyTV --ssl setTVChannel 11_3_513_65535_0_0_0 > /dev/null
+    ;;
+
+    'j')    # 
+       lgtv --name MyTV --ssl setTVChannel 11_3_519_65535_0_0_0 > /dev/null
+    ;;
+
+    'f')    # 
+       lgtv --name MyTV --ssl setTVChannel 11_3_456_65535_0_0_0 > /dev/null
+    ;;
+
+    'q')    # 
+       lgtv --name MyTV --ssl setTVChannel 11_3_492_65535_0_0_0 > /dev/null
+    ;;
+
+    ',')    # 
+       lgtv --name MyTV --ssl startApp  com.tubitv.ott.tubi > /dev/null
+    ;;
+
+    '/')    # 
+       lgtv --name MyTV --ssl startApp com.plutotv.app > /dev/null
+    ;;
+
+    '?')    # 
+       lgtv --name MyTV --ssl startApp com.webos.app.screensaver > /dev/null
+    ;;
+
+    ']')    # 
+       lgtv --name MyTV --ssl startApp com.webos.app.store-demo > /dev/null
+    ;;
+
+    '[')    # 
+       lgtv --name MyTV --ssl startApp com.webos.app.voice > /dev/null
+    ;;
+
+    '"')    # 
+       lgtv --name MyTV --ssl startApp amazon > /dev/null
+    ;;
+
+    '-')    # 
+       lgtv --name MyTV --ssl startApp com.cbs-all-access.webapp.prod > /dev/null
+    ;;
+
+    'T')    # 
+       clear
+       exit
+    ;;
+
+    ':')    # 
+       clear
+       lgtv scan 
+       sleep 10
+    ;;
+
+    ';')    # 
+      lgtv --ssl auth 192.168.12.244 MyTV
+    ;;
+	
+    '*'[0-9]*)    # user input is 'minus' followed by at least 1 number
+      echo "ERROR 1"
+    ;;
+
+    '#'[0-9]*)    # user input is 'plus' followed by at least 1 number
+      echo "ERROR 2"
+    ;;
+
+    *)    # any other input or no input
+      echo "ERROR 3"
+    ;;
+  esac
+done
+

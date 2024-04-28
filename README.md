@@ -167,6 +167,10 @@ $ lgtv --name MyTV --ssl off
 $ lgtv --name MyTV --ssl screenOff
 ```
 
+sendButton args:
+['asterisk', 'back', 'blue', 'channel_down', 'channel_up', 'click', 'down', 'enter', 'exit', 'fast_forward', 'green', 'home', 'left', 'pause', 'play', 'red', 'rewind', 'right', 'stop', 'up', 'volume_down', 'volume_up', 'yellow']
+
+
 ## Caveats
 
 You need to auth with the TV before being able to use the on command as it requires the mac address.
