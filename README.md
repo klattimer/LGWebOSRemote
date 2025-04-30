@@ -13,6 +13,7 @@ A big thanks for the contributions over the years too, lots of people have made 
 ### Tested with
 
   * 43LM6300PSB
+  * 24TL520S
   * 43UN73003LC
   * 43UJ630V-ZA
   * 60UJ6300-UA
