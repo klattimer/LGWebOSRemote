@@ -28,6 +28,7 @@ A big thanks for the contributions over the years too, lots of people have made 
   * OLED48C1 (ssl)
   * OLED42C2 (ssl)
   * OLED48C2 (ssl)
+  * OLED83C4 (ssl)
   * SK8500PLA
   * SM9010PLA
   * UF776V
@@ -93,6 +94,9 @@ All devices with firmware major version 4, product name "webOSTV 2.0"
 	lgtv --name MyTV --ssl openYoutubeLegacyURL <url>
 	lgtv --name MyTV --ssl sendButton <button>
 	lgtv --name MyTV --ssl serialise
+	lgtv --name MyTV --ssl setDeviceInfo <id> <icon> <label>
+            # Example: lgtv --name MyTV --ssl setDeviceInfo HDMI_2 hdmi.png "My Input".
+            # Purpose: force TV to disable so-called "PC mode" for inputs where the attached device incorrectly or undesiredly signals itself as "PC", eg. Raspberry Pi with LibreELEC.
 	lgtv --name MyTV --ssl setInput <input_id>
 	lgtv --name MyTV --ssl setSoundOutput <tv_speaker|external_optical|external_arc|external_speaker|lineout|headphone|tv_external_speaker|tv_speaker_headphone|bt_soundbar>
 	lgtv --name MyTV --ssl screenOff
