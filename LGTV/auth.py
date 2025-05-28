@@ -1,4 +1,5 @@
-from ws4py.client.threadedclient import WebSocketClient
+# from ws4py.client.threadedclient import WebSocketClient
+from .ws4py_patch import WebSocketClientPatch as WebSocketClient
 from getmac import get_mac_address
 import subprocess
 import socket

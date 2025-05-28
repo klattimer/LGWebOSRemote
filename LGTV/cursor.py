@@ -4,7 +4,8 @@ import inspect
 from time import sleep
 
 from .remote import LGTVRemote
-from ws4py.client.threadedclient import WebSocketClient
+# from ws4py.client.threadedclient import WebSocketClient
+from .ws4py_patch import WebSocketClientPatch as WebSocketClient
 
 
 class LGTVCursor(WebSocketClient):
