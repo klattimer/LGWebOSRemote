@@ -16,6 +16,7 @@ A big thanks for the contributions over the years too, lots of people have made 
   * 24TL520S
   * 43UN73003LC
   * 43UJ630V-ZA
+  * 43UR78006LK
   * 60UJ6300-UA
   * HU80KG.AEU (CineBeam 4K)
   * OLED48A2
@@ -23,6 +24,7 @@ A big thanks for the contributions over the years too, lots of people have made 
   * OLED55C9
   * OLED55CX5LB
   * OLED55CXAUA
+  * OLED55G29LA
   * OLED65B9PUA
   * OLED77CX9LA
   * OLED77GX
