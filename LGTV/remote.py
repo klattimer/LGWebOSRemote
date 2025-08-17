@@ -192,7 +192,7 @@ class LGTVRemote(WebSocketClient):
 
     def notification(self, message, callback=None):
         self.__send_command("request", "ssap://system.notifications/createToast", {"message": message}, callback)
-	
+
     def createAlert(self, message, button, callback=None):
         self.__send_command("request", "ssap://system.notifications/createAlert", {"message": message, "buttons": [{"label": button}]}, callback)
 
@@ -266,7 +266,7 @@ class LGTVRemote(WebSocketClient):
 
     def sendEnterKey(self, callback=None):
         self.__send_command("request", "ssap://com.webos.service.ime/sendEnterKey", None, callback)
-	    
+
     def input3DOn(self, callback=None):
         self.__send_command("request", "ssap://com.webos.service.tv.display/set3DOn", None, callback)
 
@@ -341,8 +341,11 @@ class LGTVRemote(WebSocketClient):
     def screenOn(self):
         self.__send_command("request", "ssap://com.webos.service.tvpower/power/turnOnScreen", {"standbyMode": "active"})
 
-    def getPictureSettings(self, keys=["contrast", "backlight", "brightness", "color"]):
+    def getPictureSettings(self, keys=["contrast", "backlight", "brightness", "color", "pictureMode"]):
         self.__send_command("request", "ssap://settings/getSystemSettings", {"category": "picture", "keys": keys})
+
+    def setPictureMode(self, picture_mode: str, callback=None):
+        self.__send_command("request", "ssap://settings/setSystemSettings", {"category": "picture", "settings": {"pictureMode": picture_mode}})
 
     def setDeviceInfo(self, id, icon, label, callback=None):
         self.__send_command("request", "luna://com.webos.service.eim/setDeviceInfo", {"id": id, "icon": icon, "label": label})
