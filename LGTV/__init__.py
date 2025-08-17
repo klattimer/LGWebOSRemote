@@ -14,9 +14,10 @@ from .auth import LGTVAuth
 from .cursor import LGTVCursor
 
 
-search_config = [
+config_paths = [
     "/etc/lgtv/config.json",
-    "~/.lgtv/config.json",
+    os.path.join(os.environ.get("XDG_CONFIG_HOME", os.path.expanduser("~/.config")), "lgtv/config.json"),
+    os.path.expanduser("~/.lgtv/config.json"),
     "/opt/venvs/lgtv/config/config.json"
 ]
 
@@ -60,37 +61,34 @@ def parseargs(command, argv):
     return output
 
 
-def find_config():
-    w = None
-    for f in search_config:
-        f = os.path.expanduser(f)
-        f = os.path.abspath(f)
+def find_config() -> str:
+    for f in config_paths:
+        if os.path.isfile(f):
+            return f
+    # no config file exists yet
+    for f in config_paths:
         d = os.path.dirname(f)
-        if os.path.exists(d):
-            if os.access(d, os.W_OK):
-                w = f
-            if os.path.exists(f):
-                if os.access(f, os.W_OK):
-                    return f
-        elif os.access(os.path.dirname(d), os.W_OK):
-            os.makedirs(d)
-            w = f
-    if w is None:
-        print ("Cannot find suitable config path to write, create one in %s" % ' or '.join(search_config))
-        raise Exception("No config file")
-    return w
+        if os.path.exists(d) and os.access(d, os.W_OK):
+            return f
+    # no config dir exists yet
+    for f in config_paths:
+        d = os.path.dirname(f)
+        dd = os.path.dirname(d)
+        if os.path.exists(dd) and os.access(dd, os.W_OK):
+            return f
+    print("Cannot find suitable config path to write, create one in {}".format(" or ".join(config_paths)))
+    raise Exception("No config file")
 
-
-def write_config(filename, config):
+def write_config(filename: str, config):
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
     with open(filename, 'w') as f:
-        f.write(json.dumps(config))
-
+        json.dump(config, f)
 
 def main():
     parser = argparse.ArgumentParser(
         'lgtv',
         description = '''LGTV Controller\nAuthor: Karl Lattimer <karl@qdh.org.uk>''',
-        epilog = get_commands(), 
+        epilog = get_commands(),
         formatter_class = argparse.RawDescriptionHelpFormatter
     )
     parser.add_argument('--name', '-n', default=None)
@@ -105,24 +103,21 @@ def main():
     config = {}
 
     filename = find_config()
-    if filename is not None:
-        try:
-            with open(filename) as f:
-                config = json.loads(f.read())
-        except:
-            pass
+    if os.path.isfile(filename):
+        with open(filename, "r") as f:
+            config = json.load(f)
 
     if args.command == "scan":
         results = LGTVScan()
         if len(results) > 0:
-            print (json.dumps({
+            print(json.dumps({
                 "result": "ok",
                 "count": len(results),
                 "list": results
             }))
             sys.exit(0)
         else:
-            print (json.dumps({
+            print(json.dumps({
                 "result": "failed",
                 "count": len(results)
             }))
@@ -138,9 +133,8 @@ def main():
         ws.run_forever()
         sleep(1)
         config[name] = ws.serialise()
-        if filename is not None:
-            write_config(filename, config)
-            print ("Wrote config file: " + filename)
+        write_config(filename, config)
+        print(f"Wrote config file {filename}")
         sys.exit(0)
 
     elif args.command == "setDefault":
@@ -153,7 +147,7 @@ def main():
             sys.exit(1)
         config["_default"] = name
         write_config(filename, config)
-        print ("Wrote default to config file: " + filename)
+        print(f"Wrote default to config file {filename}")
 
     # These commands require a TV name and config
     else:
@@ -195,7 +189,6 @@ def main():
             ws.run_forever()
         except KeyboardInterrupt:
             ws.close()
-
 
 if __name__ == '__main__':
     main()
