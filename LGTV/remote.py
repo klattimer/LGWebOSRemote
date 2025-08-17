@@ -1,4 +1,5 @@
-from ws4py.client.threadedclient import WebSocketClient
+# from ws4py.client.threadedclient import WebSocketClient
+from .ws4py_patch import WebSocketClientPatch as WebSocketClient
 from types import FunctionType
 from urllib.parse import parse_qs, urlparse
 from wakeonlan import send_magic_packet
