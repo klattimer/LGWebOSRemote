@@ -26,6 +26,7 @@ A big thanks for the contributions over the years too, lots of people have made 
   * OLED55CXAUA
   * OLED55G29LA
   * OLED65B9PUA
+  * OLED65G56LS
   * OLED77CX9LA
   * OLED77GX
   * OLED48C1 (ssl)
