@@ -3,7 +3,7 @@
 import inspect
 from time import sleep
 
-from .remote import LGTVRemote
+from remote import LGTVRemote
 from ws4py.client.threadedclient import WebSocketClient
 
 

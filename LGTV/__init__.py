@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from __future__ import print_function
 from inspect import getfullargspec
 
@@ -8,10 +7,15 @@ import sys
 from time import sleep
 import logging
 import argparse
-from .scan import LGTVScan
-from .remote import LGTVRemote
-from .auth import LGTVAuth
-from .cursor import LGTVCursor
+
+PACKAGE_PATH = os.path.abspath(os.path.dirname(__file__))
+if PACKAGE_PATH not in sys.path:
+    sys.path.append(PACKAGE_PATH)
+
+from scan import LGTVScan
+from remote import LGTVRemote
+from auth import LGTVAuth
+from cursor import LGTVCursor
 
 
 config_paths = [
@@ -20,6 +24,7 @@ config_paths = [
     os.path.expanduser("~/.lgtv/config.json"),
     "/opt/venvs/lgtv/config/config.json"
 ]
+
 
 def get_commands():
     text = 'commands\n'
@@ -192,3 +197,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
