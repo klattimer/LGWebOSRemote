@@ -9,7 +9,7 @@ import json
 import os
 import logging
 
-from .payload import hello_data
+from payload import hello_data
 
 
 class LGTVRemote(WebSocketClient):

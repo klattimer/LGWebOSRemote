@@ -5,7 +5,7 @@ import socket
 import re
 import json
 
-from .payload import hello_data
+from payload import hello_data
 
 
 class LGTVAuth(WebSocketClient):
