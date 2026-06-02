@@ -181,19 +181,30 @@ def main():
             cursor.execute(args.args)
             return
 
-        try:
-            ws = LGTVRemote(name, **config[name], ssl=args.ssl)
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                ws = LGTVRemote(name, **config[name], ssl=args.ssl)
 
-            if args.command == "on":
-                # "on" is special, it doesn't use a websocket connection
-                ws.on()
-                return
+                if args.command == "on":
+                    # "on" is special, it doesn't use a websocket connection
+                    ws.on()
+                    return
 
-            ws.connect()
-            ws.execute(args.command, kwargs)
-            ws.run_forever()
-        except KeyboardInterrupt:
-            ws.close()
+                ws.connect()
+                ws.execute(args.command, kwargs)
+                ws.run_forever()
+                break
+            except ConnectionResetError:
+                if attempt < max_retries - 1:
+                    wait = 5
+                    print(f"Retrying in {wait} seconds...")
+                    sleep(wait)
+                else:
+                    print("Max retries reached.  Script failed")
+                    raise    
+            except KeyboardInterrupt:
+                ws.close()
 
 if __name__ == '__main__':
     main()
