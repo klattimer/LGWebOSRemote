@@ -20,6 +20,7 @@ A big thanks for the contributions over the years too, lots of people have made 
   * 60UJ6300-UA
   * HU80KG.AEU (CineBeam 4K)
   * OLED48A2
+  * OLED48C5PUA
   * OLED55B7
   * OLED55C9
   * OLED55CX5LB
@@ -49,10 +50,12 @@ Tested with python 3.9 on Debian Unstable.
 Tested with python 3.10 on Windows 10/11
 Tested with 3.10 on WSL (Ubuntu 20.04)
 Tested with python 3.12 on macOS
+Tested with python 3.14 on Windows 11
 
 ### Likely supports
 
 All devices with firmware major version 4, product name "webOSTV 2.0"
+All devices with firmware major version 33, product name "webOSTV 25"
 
 ## Available Commands
 	lgtv scan
