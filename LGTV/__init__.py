@@ -101,6 +101,8 @@ def main():
     parser.add_argument('args', nargs='*')
     parser.add_argument('--ssl', action='store_true')
     parser.add_argument('--debug', '-d', action='store_true', help='enable debug output')
+    parser.add_argument('--list', '-l', action='store_true', help='list tv\'s and exit')
+    parser.add_argument('--json', '-j', action='store_true', help='output in json format')
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO)
@@ -112,20 +114,42 @@ def main():
         with open(filename, "r") as f:
             config = json.load(f)
 
+    if args.list:
+        for tv in config.keys():
+            if tv == '_default':
+                continue
+            if args.json:
+                print(json.dumps(config))
+            else:
+                print(f"{tv}: {config[tv]['hostname']} ({config[tv]['ip']}, {config[tv]['mac']})")
+        if not args.json:
+            if '_default' in config.keys():
+                print(f"Default is: {config['_default']}")
+            else:
+                print("No default specified")
+        return
+
     if args.command == "scan":
         results = LGTVScan()
         if len(results) > 0:
-            print(json.dumps({
-                "result": "ok",
-                "count": len(results),
-                "list": results
-            }))
+            if args.json:
+                print(json.dumps({
+                    "result": "ok",
+                    "count": len(results),
+                    "list": results
+                }))
+            else:
+                for result in results:
+                    print(f"{result['tv_name']}: {result['address']}")
             sys.exit(0)
         else:
-            print(json.dumps({
-                "result": "failed",
-                "count": len(results)
-            }))
+            if args.json:
+                print(json.dumps({
+                    "result": "failed",
+                    "count": len(results)
+                }))
+            else:
+                print("No LG TV's found")
             sys.exit(1)
 
     elif args.command == "auth":
@@ -147,6 +171,10 @@ def main():
         if filename is None:
             print("No config file found")
             sys.exit(1)
+        if name == '_default':
+            print("Error: default cannot be _default")
+            return
+            
         if name not in config:
             print("TV not found in config")
             sys.exit(1)
