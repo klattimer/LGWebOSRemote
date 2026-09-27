@@ -16,6 +16,7 @@ from scan import LGTVScan
 from remote import LGTVRemote
 from auth import LGTVAuth
 from cursor import LGTVCursor
+from instart import LGTVInStart
 
 
 config_paths = [
@@ -187,7 +188,7 @@ def main():
         try:
             kwargs = parseargs(args.command, args.args)
         except Exception:
-            if args.command not in {"sendButton"}:
+            if args.command not in {"sendButton", "inStart", "ezAdjust"}:
                 parser.print_help()
                 sys.exit(1)
 
@@ -207,6 +208,13 @@ def main():
             cursor = LGTVCursor(name, **config[name], ssl=args.ssl)
             cursor.connect()
             cursor.execute(args.args)
+            return
+
+        if args.command in ("inStart", "ezAdjust"):
+            irKey = "ezAdjust" if args.command == "ezAdjust" else "inStart"
+            pin = args.args[0] if args.args else "0413"
+            ws = LGTVInStart(name, **config[name], ssl=args.ssl, irKey=irKey)
+            ws.unlock(pin)
             return
 
         max_retries = 3
