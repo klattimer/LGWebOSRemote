@@ -92,6 +92,8 @@ All devices with firmware major version 33, product name "webOSTV 25"
 	lgtv --name MyTV --ssl inputMediaPlay
 	lgtv --name MyTV --ssl inputMediaRewind
 	lgtv --name MyTV --ssl inputMediaStop
+	lgtv --name MyTV --ssl inStart [pin]
+	lgtv --name MyTV --ssl ezAdjust [pin]
 	lgtv --name MyTV --ssl listApps
 	lgtv --name MyTV --ssl listLaunchPoints
 	lgtv --name MyTV --ssl listChannels
