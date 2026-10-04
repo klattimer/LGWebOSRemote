@@ -1,12 +1,21 @@
 # LGWebOSRemote
+
 Command line webOS remote for LGTVs. This tool uses a connection via websockets to port 3000 on newer LG TVs, there are other tools which use a restful connection to port 8080 however that port is closed on newer firmware versions.
+
+## A note regarding privacy/security
+
+It has come to my attention that LG Televisions very likely leak private information to a variety of shady companies including but not limited to, screenshots, sound clips and geo-locatable information such as Wifi network names, and even internal network scans. These devices, which amount to a computer connected to a screen have suffered many security vulnerabilities over many years and are potentially harmful to your privacy and home network security. 
+
+Some settings can be disabled e.g. **Automatic Content Recognition**, however the level of trust that has been placed in consumer electronics companies should now be re-evaluated. Personally, I have decided to disconnect my LG TV from my Wifi network, and although I maintain this project out of kindness to the community, I recommend that other users disable their wifi functionality on devices which don't need it. Including washing machines, fridge freezers, dishwashers and anything else that may compromise your security or privacy.
+
+(Malware bytes article)[https://www.malwarebytes.com/blog/privacy/2026/09/lg-tv-flaws-could-let-attackers-listen-in-even-in-standby-mode]
+(PCMag article on disabling ACR)[https://uk.pcmag.com/tvs/163946/your-tv-is-spying-on-you-change-this-setting-to-stop-it]
 
 ## A note from the developer
 
 My LG TV is now so out of date that largely what is developed here is tested, improved and debugged by the community. As it goes my TV works fine and I'm not the kind of person to create more unnecessary electrical waste than I need to so as long as my current TV works, it's largely down to you guys.
 
 A big thanks for the contributions over the years too, lots of people have made lots of changes to this project over time, and it would only be as useful as it is with their help.
-
 
 ## Supported models
 
