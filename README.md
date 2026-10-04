@@ -8,8 +8,8 @@ It has come to my attention that LG Televisions very likely leak private informa
 
 Some settings can be disabled e.g. **Automatic Content Recognition**, however the level of trust that has been placed in consumer electronics companies should now be re-evaluated. Personally, I have decided to disconnect my LG TV from my Wifi network, and although I maintain this project out of kindness to the community, I recommend that other users disable their wifi functionality on devices which don't need it. Including washing machines, fridge freezers, dishwashers and anything else that may compromise your security or privacy.
 
-(Malware bytes article)[https://www.malwarebytes.com/blog/privacy/2026/09/lg-tv-flaws-could-let-attackers-listen-in-even-in-standby-mode]
-(PCMag article on disabling ACR)[https://uk.pcmag.com/tvs/163946/your-tv-is-spying-on-you-change-this-setting-to-stop-it]
+[Malware bytes article](https://www.malwarebytes.com/blog/privacy/2026/09/lg-tv-flaws-could-let-attackers-listen-in-even-in-standby-mode)
+[PCMag article on disabling ACR](https://uk.pcmag.com/tvs/163946/your-tv-is-spying-on-you-change-this-setting-to-stop-it)
 
 ## A note from the developer
 
