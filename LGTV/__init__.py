@@ -168,6 +168,9 @@ def main():
         sys.exit(0)
 
     elif args.command == "setDefault":
+        if len(args.args) != 1:
+            print('lgtv setDefault <tv_name>')
+            sys.exit(1)
         name = args.args[0]
         if filename is None:
             print("No config file found")
